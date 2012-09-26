@@ -27,6 +27,18 @@ public class StateRepresentation {
         fillUnused();
     }
     
+    
+    public Action returnAction(int index){
+		switch(index){
+			case 0: return Action.HorizontalApproach;
+			case 1: return Action.HorizontalRetreat;
+			case 2: return Action.VerticalApproach;
+			case 3: return Action.VerticalRetreat;
+			case 4: return Action.Wait;
+		}
+		return null;
+	}
+    
     /**
      * Enumerator listing all possible actions in the state space
      */
@@ -42,6 +54,8 @@ public class StateRepresentation {
     	Action(int index){
     		i = index;
     	}
+    	
+    	
     	
     	int getIntValue(){
     		return i;
@@ -190,4 +204,114 @@ public class StateRepresentation {
     	Position pos = linearIndexToPosition(linearIndex);
     	stateRep[pos.getY()][pos.getX()][action.getIntValue()] = value;
     }
+    
+  //Determines in which wind direction the prey is located
+    private Direction getDirection(Position predator, Position prey){
+    	if(prey.getX()>=predator.getX()){
+    		if(prey.getY()>=predator.getY()){
+    			if(predator.getX()>=predator.getY()){
+    				return Direction.NNW;
+    			}
+    			else{
+    				return Direction.WNW;
+    			}
+    		}
+    		else{
+    			if(Environment.WIDTH-predator.getX()>predator.getY()){
+    				return Direction.WZW;
+    			}
+    			else{
+    				return Direction.ZZW;
+    			}
+    		}
+    	}
+    	else{
+    		if(prey.getY()>=predator.getY()){
+    			if(Environment.HEIGHT-predator.getY()<predator.getX()){
+    				return Direction.ONO;
+    			}
+    			else{
+    				return Direction.NNO;
+    			}
+    		}
+    		else{
+    			if(predator.getY()>predator.getX()){
+    				return Direction.ZZO;
+    			}
+    			else{
+    				return Direction.OZO;
+    			}
+    		}
+    	}
+    }
+
+    /**
+     * Provides real world move based on action in state representation and position of the prey
+     * @param other = position of prey
+     * @param stateRepMove = action in state space
+     * @return action in real world
+     */
+    public int getMove(Position predator, Position prey, int stateRepMove) {
+		Direction direction = getDirection(predator, prey);
+		switch(direction){
+		case NNW:
+			
+			switch(stateRepMove){
+			case 0:return 1;
+			case 1:return 3;
+			case 2:return 2; 
+			case 3:return 0;
+			}
+		case NNO:
+			switch(stateRepMove){
+			case 0:return 3;
+			case 1:return 1;
+			case 2:return 2;
+			case 3:return 0;
+			}
+		case ONO:
+			switch(stateRepMove){
+			case 0:return 2;
+			case 1:return 0;
+			case 2:return 3;
+			case 3:return 1;
+			}
+		case OZO:
+			switch(stateRepMove){
+			case 0:return 0;
+			case 1:return 2;
+			case 2:return 3;
+			case 3:return 1;
+			}
+		case ZZO:
+			switch(stateRepMove){
+			case 0:return 3;
+			case 1:return 1;
+			case 2:return 0;
+			case 3:return 2;
+			}
+		case ZZW:
+			switch(stateRepMove){
+			case 0:return 1;
+			case 1:return 3;
+			case 2:return 0;
+			case 3:return 2;
+			}
+		case WZW:
+			switch(stateRepMove){
+			case 0:return 0;
+			case 1:return 2;
+			case 2:return 1;
+			case 3:return 3;
+			}
+		case WNW:
+			switch(stateRepMove){
+			case 0:return 2;
+			case 1:return 0;
+			case 2:return 1;
+			case 3:return 3;
+			}
+		}
+		return -1;
+	}
 }

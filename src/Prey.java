@@ -20,6 +20,8 @@ public class Prey implements Agent {
 	@Override
 	public void doMove(Position other) {
 		
+		if(myPos.getX()==other.getX()&& myPos.getY()==other.getY())return;
+		
 		double chance = Math.random();
 		if (chance < WAIT) return;
 		
@@ -53,6 +55,11 @@ public class Prey implements Agent {
 	@Override
 	public boolean isConverged() {
 		return false;
+	}
+
+	@Override
+	public void observeReward() {
+		return;	
 	}
 
     

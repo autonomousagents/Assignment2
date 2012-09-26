@@ -28,6 +28,7 @@ public class Environment {
         if (!checkForEnd()) {
             prey.doMove(getPredatorPos());
         }
+        predator.observeReward();
     }
 
     public boolean isEnded() {

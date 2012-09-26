@@ -76,10 +76,19 @@ public class Position {
         return this.getY() * Environment.WIDTH + this.getX();
     }
 
-
-
-        
-
-
+    private void adjustPosition(int move) {
+        switch(move){
+        //Up
+        case 0: y = (y +Environment.HEIGHT-1)% Environment.HEIGHT;
+        //Right
+        case 1: x = (x +Environment.WIDTH+1) % Environment.WIDTH;
+        //Down
+        case 2: y = (y +Environment.HEIGHT+1)% Environment.HEIGHT;
+        //Left
+        case 3: x = (x +Environment.WIDTH-1) % Environment.WIDTH;
+        //Wait
+        case 4: return;
+        }
+    }
 	
 }

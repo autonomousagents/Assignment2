@@ -10,5 +10,7 @@ public interface Agent {
 	public void reset();
 	
 	public boolean isConverged();
+	
+	public void observeReward();
 
 }
