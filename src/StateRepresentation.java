@@ -10,18 +10,20 @@ import java.util.Arrays;
 
 
 public class StateRepresentation {
-    private double stateRep[][];
+    private double stateRep[][][];
     public static final int stateRepWidth = Math.round(Environment.WIDTH/2)+1;
     public static final int stateRepHeight = Math.round(Environment.HEIGHT/2)+1;
     public static final int nrActions = 5;
     public static final int nrStates = 21;
+    private double initialValue;
     
     /**
      * Constructor which initializes the state space representation
      */
-    public StateRepresentation ( ){
-        stateRep = new double[stateRepHeight][stateRepWidth];
-        for(double[] row: stateRep)Arrays.fill(row, 0.0);
+    public StateRepresentation (double init ){
+        stateRep = new double[stateRepHeight][stateRepWidth][nrActions];
+        for(double[][] m: stateRep)
+        	for(double[] row: m)Arrays.fill(row, init);
         fillUnused();
     }
     
@@ -29,11 +31,21 @@ public class StateRepresentation {
      * Enumerator listing all possible actions in the state space
      */
     public enum Action {
-    	HorizontalApproach,
-    	HorizontalRetreat,
-    	VerticalApproach,
-    	VerticalRetreat,
-    	Wait;
+
+    	HorizontalApproach(0),
+    	HorizontalRetreat(1),
+    	VerticalApproach(2),
+    	VerticalRetreat(3),
+    	Wait(4);
+    	
+    	private int i;
+    	Action(int index){
+    		i = index;
+    	}
+    	
+    	int getIntValue(){
+    		return i;
+    	}
     }
     
     /**
@@ -41,9 +53,9 @@ public class StateRepresentation {
      * @param linearIndex of state s
      * @return v-value corresponding to s
      */
-    public double getVvalue(int linearIndex){
+    public double getValue(int linearIndex, Action action){
     	Position pos = linearIndexToPosition(linearIndex);
-    	return stateRep[pos.getY()][pos.getX()];
+    	return stateRep[pos.getY()][pos.getX()][action.getIntValue()];
     }
 
     /**
@@ -148,30 +160,34 @@ public class StateRepresentation {
     private void fillUnused(){
     	for(int i = 0;i<stateRepHeight;i++){
     		for(int j = i+1;j<stateRepWidth;j++){
-    			stateRep[i][j] =  -1.0;
+    			for(int k = 0;k<nrActions;k++)
+    			stateRep[i][j][k] =  -1.0;
     		}
     	}
     }
 
-    public double[][] getMatrix(){
+    public double[][][] getMatrix(){
         return stateRep;
        }
-       
-    public void printLatexTable(){
-        for(int i = 0;i< stateRepHeight;i++){
-        	System.out.println(i + " & ");
-        	for(int j = 0; j<stateRepWidth;j++){
-        		System.out.format("%7.4f",stateRep[i][j]);
-        		if(j!=stateRepWidth-1){
-        			System.out.print(" & ");
-        		}
-        	}
-        System.out.println("\\\\");
-        }
-    } 
+ 
     
-    public void setVvalue(int linearIndex, double value){
+// Aanpassen voor gebruik met state action pairs. 
+    
+//    public void printLatexTable(){
+//        for(int i = 0;i< stateRepHeight;i++){
+//        	System.out.println(i + " & ");
+//        	for(int j = 0; j<stateRepWidth;j++){
+//        		System.out.format("%7.4f",stateRep[i][j]);
+//        		if(j!=stateRepWidth-1){
+//        			System.out.print(" & ");
+//        		}
+//        	}
+//        System.out.println("\\\\");
+//        }
+//    } 
+    
+    public void setValue(int linearIndex,Action action, double value){
     	Position pos = linearIndexToPosition(linearIndex);
-    	stateRep[pos.getY()][pos.getX()] = value;
+    	stateRep[pos.getY()][pos.getX()][action.getIntValue()] = value;
     }
 }
