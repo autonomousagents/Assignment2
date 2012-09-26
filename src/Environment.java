@@ -25,10 +25,8 @@ public class Environment {
 
     public void nextTimeStep() {
         predator.doMove(getPreyPos());
-        if (!checkForEnd()) {
-            prey.doMove(getPredatorPos());
-        }
-        predator.observeReward(reward(prey.getPos(), predator.getPos()));
+        prey.doMove(getPredatorPos());
+        predator.observeReward(reward(prey.getPos(), predator.getPos()), prey.getPos());
     }
 
     public boolean isEnded() {
