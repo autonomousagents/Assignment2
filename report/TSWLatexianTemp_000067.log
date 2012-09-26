@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.1.5)  26 SEP 2012 16:17
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.1.5)  26 SEP 2012 16:20
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000062.tex"
-(/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000062.tex
+**"/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000067.tex"
+(/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000067.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, nohyphenation, german-x-2009-06-19, ngerman-x-2009-06-19, ancientgreek, ibycus, arabic, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, galician, german, ngerman, monogreek, greek, hungarian, icelandic, indonesian, interlingua, irish, italian, kurmanji, latin, latvian, lithuanian, mongolian, mongolian2a, bokmal, nynorsk, polish, portuguese, romanian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, turkish, ukenglish, ukrainian, uppersorbian, welsh, loaded.
 (/usr/local/texlive/2009/texmf-dist/tex/latex/base/article.cls
@@ -44,8 +44,8 @@ Package ifvtex Info: VTeX not detected.
 \Gm@even@mp=\dimen106
 \Gm@dimlist=\toks15
  (/usr/local/texlive/2009/texmf-dist/tex/xelatex/xetexconfig/geometry.cfg))
-No file TSWLatexianTemp_000062.aux.
-\openout1 = `TSWLatexianTemp_000062.aux'.
+No file TSWLatexianTemp_000067.aux.
+\openout1 = `TSWLatexianTemp_000067.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
 LaTeX Font Info:    ... okay on input line 7.
@@ -108,7 +108,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 23.
 [1
 
-{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./TSWLatexianTemp_000062.aux) ) 
+{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./TSWLatexianTemp_000067.aux) ) 
 Here is how much of TeX's memory you used:
  654 strings out of 493848
  9291 string characters out of 3149208
@@ -118,7 +118,7 @@ Here is how much of TeX's memory you used:
  714 hyphenation exceptions out of 8191
  24i,7n,32p,442b,279s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on TSWLatexianTemp_000062.pdf (1 page, 103179 bytes).
+Output written on TSWLatexianTemp_000067.pdf (1 page, 103207 bytes).
 PDF statistics:
  42 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
