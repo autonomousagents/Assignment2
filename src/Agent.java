@@ -11,6 +11,6 @@ public interface Agent {
 	
 	public boolean isConverged();
 	
-	public void observeReward();
+	public void observeReward(double reward);
 
 }

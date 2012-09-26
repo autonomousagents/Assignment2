@@ -27,8 +27,13 @@ public class StateRepresentation {
         fillUnused();
     }
     
+    public double[] getStateActionPairValues(int linearIndex){
+    	Position pos = linearIndexToPosition(linearIndex);
+    	return stateRep[pos.getY()][pos.getX()];
+    }
     
-    public Action returnAction(int index){
+    
+    public static Action returnAction(int index){
 		switch(index){
 			case 0: return Action.HorizontalApproach;
 			case 1: return Action.HorizontalRetreat;

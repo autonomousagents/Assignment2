@@ -58,8 +58,9 @@ public class Prey implements Agent {
 	}
 
 	@Override
-	public void observeReward() {
-		return;	
+	public void observeReward(double reward) {
+		// TODO Auto-generated method stub
+		
 	}
 
     

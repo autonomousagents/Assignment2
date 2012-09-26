@@ -8,6 +8,7 @@ public class PredatorQLearning implements Agent{
 	private Position startPos;
 	private StateRepresentation stateSpace;
 	private static final double initialValue = 15;
+	private Position oldPos;
 	
 	public PredatorQLearning (double gamma, double alpha, double epsilon, Position startPos){
 		this.gamma = gamma;
@@ -18,22 +19,7 @@ public class PredatorQLearning implements Agent{
 		stateSpace = new StateRepresentation(initialValue);
 	}
 	
-	private void qLearning(){
-		//epsilon greedy
-		if(Math.random() <= epsilon){
-		//falls within epsilon
-			//return uniformly random action
-			StateRepresentation.Action action = StateRepresentation.returnAction((int)Math.random() * 5); 
-		}
-		else {
-		  
-		//falls outside epsilon
-		  //remember oldState
-		  //take greedy action
-		}
-	}
-	
-	public void observeReward(){
+	public void observeReward(double reward){
 		//observe newState & reward
 		  //update oldstate with newState state action pair values
 		  //currentstate = newstate
@@ -42,7 +28,22 @@ public class PredatorQLearning implements Agent{
 	
 	@Override
 	public void doMove(Position other) {
+		StateRepresentation.Action action;
+		//remember oldState
+		oldPos = new Position(myPos);
 		
+		//epsilon greedy
+		if(Math.random() <= epsilon){
+		//falls within epsilon
+			//return uniformly random action
+			action = StateRepresentation.returnAction((int)Math.random() * 5); 
+		}
+		else {
+		//falls outside epsilon
+		  //take greedy action
+//			int[] stateSpace.getRelDistance(myPos, other);
+//			stateSpace.getValue(linearIndex, action);
+		}
 	}
 
 	@Override
