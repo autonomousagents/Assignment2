@@ -13,16 +13,16 @@ import java.util.Random;
  */
 public class PredatorOnPolicyMonteCarlo implements Agent{
 
-    double tau;
-    int nrRuns, currentNrRuns;
-    StateRepresentation representation;
-    ArrayList <SARcombi> SARcombis;
-    Position myPos;
-    Position startPos;
-    Position preyPos;
-    int state;
-    StateRepresentation.Action currentAction;
-    ArrayList<ArrayList<ArrayList<Double>>> rewards;
+    private double tau;
+    private int nrRuns, currentNrRuns;
+    private StateRepresentation representation;
+    private ArrayList <SARcombi> SARcombis;
+    private Position myPos;
+    private Position startPos;
+    private Position preyPos;
+    private int state;
+    private StateRepresentation.Action currentAction;
+    private ArrayList<ArrayList<ArrayList<Double>>> rewards;
     
     
     //Policy is impliciet vastgelegd in statespaceRepresentation

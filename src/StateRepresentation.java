@@ -53,6 +53,12 @@ public class StateRepresentation {
         public  final static Action[]  actionValues = Action.values();
     	public final static int nrActions=5;
 
+        public final static String actionNames[] = {String.format("%-15s","Hor.Approach"),
+                                                    String.format("%-15s","Hor.Retreat"),
+                                                    String.format("%-15s","Ver.Approach"),
+                                                    String.format("%-15s","Ver.Retreat"),
+                                                    String.format("%-15s","Wait")};
+
     	private int i;
     	Action(int index){
     		i = index;
@@ -214,11 +220,11 @@ public class StateRepresentation {
     public void printAll (boolean latex){
         if(latex){
             for(int k = 0; k<nrActions;k++){   
-                System.out.println("Action = " + k);
+                System.out.println("Action = " + Action.actionNames[k]);
                 for(int i =0;i<stateRepHeight;i++){
                     for(int j = 0; j<stateRepWidth;j++){
                         if(stateRep[i][j][k]!=-1){
-                            System.out.print(stateRep[i][j][k]);
+                            System.out.print(String.format("%.4f",stateRep[i][j][k]));
                         }
                         if(j==stateRepWidth-1){
                         System.out.print("\\\\ \n");
@@ -233,11 +239,11 @@ public class StateRepresentation {
         }
         else{
             for(int k = 0; k<nrActions;k++){   
-                System.out.println("Action = " + k);
+                System.out.println("Action = " + Action.actionNames[k]);
                 for(int i =0;i<stateRepHeight;i++){
                     for(int j = 0; j<stateRepWidth;j++){
                         if(stateRep[i][j][k]!=-1){
-                            System.out.print(stateRep[i][j][k]);
+                            System.out.print(String.format("%.4f", stateRep[i][j][k]));
                         }
                         if(j==stateRepWidth-1){
                             System.out.print("\n");
@@ -254,7 +260,7 @@ public class StateRepresentation {
     
     public void printForOneAction (boolean latex, int action){
         if(latex){ 
-            System.out.println("Action = " + action);
+            System.out.println("Action = " + Action.actionNames[action]);
             for(int i =0;i<stateRepHeight;i++){
                 for(int j = 0; j<stateRepWidth;j++){
                     if(stateRep[i][j][action]!=-1){
@@ -271,7 +277,7 @@ public class StateRepresentation {
             System.out.println("\n");            
         }
         else{ 
-            System.out.println("Action = " + action);
+            System.out.println("Action = " + Action.actionNames[action]);
             for(int i =0;i<stateRepHeight;i++){
                 for(int j = 0; j<stateRepWidth;j++){
                     if(stateRep[i][j][action]!=-1){

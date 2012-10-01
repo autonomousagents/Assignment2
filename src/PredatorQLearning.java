@@ -14,8 +14,9 @@ public class PredatorQLearning implements Agent {
     private final double doubleComparisonEpsilon = 0.0001;
     private StateRepresentation.Action currentAction;
     private double currentReward;
-    private int currentState;
     private int oldState;
+    
+    private int nrRuns, currentNrRuns;
 
     public PredatorQLearning(double gamma, double alpha, double epsilon, Position startPos) {
         this.gamma = gamma;
@@ -25,10 +26,10 @@ public class PredatorQLearning implements Agent {
         this.myPos = new Position(startPos);
         stateSpace = new StateRepresentation(initialValue);
 
+
     }
 
     /**
-     * TODO
      *
      * @return max_{a'} Q(s', a')
      * gebruik myPos, dat is nu s'
@@ -42,8 +43,10 @@ public class PredatorQLearning implements Agent {
         double[] actionvalues = stateSpace.getStateActionPairValues(linearIndex);
         double bestActionValue = Environment.minimumReward;
 
-        //get all greedy actions
-        for (int i = 1; i < stateSpace.nrActions; i++) {
+        //get best action value
+        for (int i = 0; i < StateRepresentation.nrActions; i++) {
+
+            System.out.println("action value of "+StateRepresentation.Action.actionNames[i]+" = " + String.format("%.3f",actionvalues[i]));
 
             if (actionvalues[i] > bestActionValue) {
                 bestActionValue = actionvalues[i];
@@ -57,21 +60,28 @@ public class PredatorQLearning implements Agent {
      * Is being invoked from Environment
      * @see Environment.nextTimeStep();
      *
+     * this.myPos is already adjusted
+     * @see this.doMove(...)
+     * 
      * observe newState & reward,
      * update oldstate with newState state action pair values
-     * finally, set state to new state (?)
      *
      * @param reward : reward gotten in currentState
      * @param other : position of prey
      */
     public void observeReward(double reward, Position other) {
 
+      //  if (myPos.equals(other)) {
+       //     return;
+       // }
+
+        System.out.println("observe reward");
 
         currentReward = reward;
 
         // new state
-        int[] reldis = stateSpace.getRelDistance(myPos, other);
-        int newState = StateRepresentation.relDistanceToLinearIndex(reldis[0], reldis[1]);
+        // int[] reldis = stateSpace.getRelDistance(myPos, other);
+        //int newState = StateRepresentation.relDistanceToLinearIndex(reldis[0], reldis[1]);
 
         // old state
         int[] reldisOld = stateSpace.getRelDistance(oldPos, other);
@@ -81,7 +91,7 @@ public class PredatorQLearning implements Agent {
 
         double oldQValue = stateSpace.getValue(oldState, currentAction);
 
-        double maxActionValue = getBestActionValue(other); // TODO
+        double maxActionValue = getBestActionValue(other);
 
         double TDvalue = alpha * (currentReward + (gamma * (maxActionValue - oldQValue)));
         double newQValue = oldQValue + TDvalue;
@@ -106,16 +116,15 @@ public class PredatorQLearning implements Agent {
             action = StateRepresentation.returnAction((int) (Math.random() * Direction.nrMoves));
         }
         else {
+
             //falls outside epsilon
-
-
             ArrayList<StateRepresentation.Action> bestActions = new ArrayList<StateRepresentation.Action>();
 
             double[] actionvalues = stateSpace.getStateActionPairValues(linearIndex);
             double bestActionValue = Environment.minimumReward;
 
             //get all greedy actions
-            for (int i = 1; i < stateSpace.nrActions; i++) {
+            for (int i = 0; i < StateRepresentation.nrActions; i++) {
 
                 if (actionvalues[i] > bestActionValue) {
                     bestActionValue = actionvalues[i];
@@ -160,5 +169,14 @@ public class PredatorQLearning implements Agent {
     public boolean isConverged() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    public void printQValues(boolean latex, int action) {
+        if (action == -1) {
+            stateSpace.printAll(latex);
+        }
+        else {
+            stateSpace.printForOneAction(latex, action);
+        }
     }
 }
