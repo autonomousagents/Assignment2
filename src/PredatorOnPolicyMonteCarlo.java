@@ -14,7 +14,7 @@ import java.util.Random;
 public class PredatorOnPolicyMonteCarlo implements Agent{
 
     double tau;
-    int nrRuns;
+    int nrRuns, currentNrRuns;
     StateRepresentation representation;
     ArrayList <SARcombi> SARcombis;
     Position myPos;
@@ -22,6 +22,7 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
     Position preyPos;
     int state;
     StateRepresentation.Action currentAction;
+    ArrayList<ArrayList<ArrayList<Double>>> rewards;
     
     
     //Policy is impliciet vastgelegd in statespaceRepresentation
@@ -31,9 +32,18 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         representation = new StateRepresentation(init);
         SARcombis = new ArrayList<>();
         myPos = new Position(startPos);
+        currentNrRuns = 0;
         this.startPos = new Position(startPos);
+        preyPos = new Position(startPosPrey);
         int [] reldis = representation.getRelDistance(myPos, preyPos);
         state = representation.relDistanceToLinearIndex(reldis[0], reldis[1]);
+        rewards = new ArrayList<ArrayList<ArrayList<Double>>>();
+        for(int s = 0; s<StateRepresentation.nrStates;s++){
+            rewards.add(new ArrayList<ArrayList<Double>>());
+            for(int a = 0; a<StateRepresentation.nrActions;a++){
+                rewards.get(s).add(new ArrayList<Double>());
+            }
+        }
     }
     
     @Override
@@ -84,15 +94,29 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
 
     @Override
     public boolean isConverged() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(currentNrRuns<nrRuns){
+            return false;
+        }
+        return true;
     }
 
     @Override
     public void observeReward(double reward, Position prey) {
         int [] reldis = representation.getRelDistance(myPos, prey);
+        preyPos = new Position(prey);
         state = representation.relDistanceToLinearIndex(reldis[0], reldis[1]);
-        SARcombis.add(new SARcombi(state, currentAction, reward));
+        SARcombis.add(new SARcombi(state, currentAction, reward));        
     }
+
+    private boolean contains(int[][] stateActionPairs, SARcombi sar) {
+        for(int i = 0; i<stateActionPairs.length;i++){
+                if(sar.getAction().getIntValue()==stateActionPairs[i][1] && sar.getState()==stateActionPairs[i][0] ){
+                    return true;
+                }
+        }
+        return false;
+    }
+    
     
     private class SARcombi{
         int state;
@@ -119,7 +143,55 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
     }
     
     public void learnAfterEpisode(){
-        //leren
-        //SAR rij weer leeg maken voor volgende episode.
+        int [][] stateActionPairs = new int [SARcombis.size()][2]; 
+        fill(stateActionPairs);
+        double R;
+        //Voor elk visited s,a pair
+        for(int i = 0; i< SARcombis.size();i++){
+            if(!contains(stateActionPairs,SARcombis.get(i))){
+                R = SARcombis.get(i).getReward();
+                for(int j = i+1; j<SARcombis.size();j++){
+                    R+=SARcombis.get(j).getReward();
+                }
+                int stateCurrent =SARcombis.get(i).getState();
+                int actionCurrent = SARcombis.get(i).getAction().getIntValue();
+                stateActionPairs[i][0] = stateCurrent;
+                stateActionPairs[i][1] = actionCurrent;
+                //Add to list of rewards
+                rewards.get(stateCurrent).get(actionCurrent).add(R);
+            }
+        }
+        //Update Q(s,a) values
+        for(int i = 0; i<stateActionPairs.length;i++){
+            if(stateActionPairs[i][0]!=-1){    
+                ArrayList <Double> rewardsOfCombi =rewards.get(stateActionPairs[i][0]).get(stateActionPairs[i][1]);
+                double total = 0;
+                for(int j = 0; j< rewardsOfCombi.size();j++){
+                    total+= rewardsOfCombi.get(j);
+                }
+                total = total/rewardsOfCombi.size();
+                representation.setValue(stateActionPairs[i][0], StateRepresentation.returnAction(stateActionPairs[i][1]), total);
+            }
+        }   
+       
+        ///Empty SAR arrayList for next run.
+        SARcombis = new ArrayList<>();
+        currentNrRuns++;
+    }
+    
+    private void fill(int[][] stateActionPairs) {
+        for(int i = 0; i<stateActionPairs.length;i++){
+            stateActionPairs[i][0]=-1;
+            stateActionPairs[i][1]=-1;
+        }
+    }
+    
+    public void printQValues(boolean latex, int action){
+        if(action==-1){
+        representation.printAll(latex);
+        }
+        else{
+            representation.printForOneAction(latex, action);
+        }
     }
 }

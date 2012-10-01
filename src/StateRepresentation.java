@@ -210,6 +210,85 @@ public class StateRepresentation {
     	stateRep[pos.getY()][pos.getX()][action.getIntValue()] = value;
     }
     
+    public void printAll (boolean latex){
+        if(latex){
+            for(int k = 0; k<nrActions;k++){   
+                System.out.println("Action = " + k);
+                for(int i =0;i<stateRepHeight;i++){
+                    for(int j = 0; j<stateRepWidth;j++){
+                        if(stateRep[i][j][k]!=-1){
+                            System.out.print(stateRep[i][j][k]);
+                        }
+                        if(j==stateRepWidth-1){
+                        System.out.print("\\\\ \n");
+                        }
+                        else{
+                            System.out.print(" & ");
+                        }
+                    }                    
+                }
+                System.out.println("\n");
+            }
+        }
+        else{
+            for(int k = 0; k<nrActions;k++){   
+                System.out.println("Action = " + k);
+                for(int i =0;i<stateRepHeight;i++){
+                    for(int j = 0; j<stateRepWidth;j++){
+                        if(stateRep[i][j][k]!=-1){
+                            System.out.print(stateRep[i][j][k]);
+                        }
+                        if(j==stateRepWidth-1){
+                            System.out.print("\n");
+                        }
+                        else{
+                            System.out.print(" ");
+                        }
+                    }                    
+                }
+                System.out.println("\n");
+            }
+        }
+    }
+    
+    public void printForOneAction (boolean latex, int action){
+        if(latex){ 
+            System.out.println("Action = " + action);
+            for(int i =0;i<stateRepHeight;i++){
+                for(int j = 0; j<stateRepWidth;j++){
+                    if(stateRep[i][j][action]!=-1){
+                        System.out.print(stateRep[i][j][action]);
+                    }
+                    if(j==stateRepWidth-1){
+                    System.out.print("\\\\ \n");
+                    }
+                    else{
+                        System.out.print(" & ");
+                    }
+                }               
+            }
+            System.out.println("\n");            
+        }
+        else{ 
+            System.out.println("Action = " + action);
+            for(int i =0;i<stateRepHeight;i++){
+                for(int j = 0; j<stateRepWidth;j++){
+                    if(stateRep[i][j][action]!=-1){
+                        System.out.print(stateRep[i][j][action]);
+                    }
+                    if(j==stateRepWidth-1){
+                        System.out.print("\n");
+                    }
+                    else{
+                        System.out.print(" ");
+                    }
+                }
+                
+            }
+            System.out.println("\n");            
+        }
+    }
+    
   //Determines in which wind direction the prey is located
     private Direction getDirection(Position predator, Position prey){
     	if(prey.getX()>=predator.getX()){

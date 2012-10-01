@@ -18,15 +18,17 @@ public class Environment {
     public static final double minimumReward = 0;
     public static final double normalReward = 0;
 
-    public Environment(Agent predator) {
+    public Environment(Agent predator, Position preyStart) {
         this.isEnded = false;
         this.predator = predator;
+        prey = new Prey(preyStart);
     }
 
     public void nextTimeStep() {
         predator.doMove(getPreyPos());
         prey.doMove(getPredatorPos());
         predator.observeReward(reward(prey.getPos(), predator.getPos()), prey.getPos());
+        checkForEnd();
     }
 
     public boolean isEnded() {
@@ -51,7 +53,7 @@ public class Environment {
     	
         prey = new Prey(new Position(5, 5));
         isEnded = false;
-        //predator.reset();
+        predator.reset();
     }
 
     public static double reward(Position prey, Position predator) {
@@ -66,5 +68,12 @@ public class Environment {
     public void setPredatorType(int nr) {
 
         predatorType = nr;
+    }
+    
+    public void doRun(){
+        while(!isEnded){
+            nextTimeStep();            
+        }
+        reset();
     }
 }
