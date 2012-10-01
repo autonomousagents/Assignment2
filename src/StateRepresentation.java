@@ -13,7 +13,7 @@ public class StateRepresentation {
     private double stateRep[][][];
     public static final int stateRepWidth = Math.round(Environment.WIDTH/2)+1;
     public static final int stateRepHeight = Math.round(Environment.HEIGHT/2)+1;
-    public static final int nrActions = 5;
+    public static final int nrActions = Action.nrActions;
     public static final int nrStates = 21;
     private double initialValue;
     
@@ -34,14 +34,9 @@ public class StateRepresentation {
     
     
     public static Action returnAction(int index){
-		switch(index){
-			case 0: return Action.HorizontalApproach;
-			case 1: return Action.HorizontalRetreat;
-			case 2: return Action.VerticalApproach;
-			case 3: return Action.VerticalRetreat;
-			case 4: return Action.Wait;
-		}
-		return null;
+		 if (index >= 0 && index < nrActions)
+            return Action.actionValues[index];
+         return null;
 	}
     
     /**
@@ -54,14 +49,15 @@ public class StateRepresentation {
     	VerticalApproach(2),
     	VerticalRetreat(3),
     	Wait(4);
-    	
+
+        public  final static Action[]  actionValues = Action.values();
+    	public final static int nrActions=5;
+
     	private int i;
     	Action(int index){
     		i = index;
     	}
-    	
-    	
-    	
+        
     	int getIntValue(){
     		return i;
     	}
