@@ -116,6 +116,11 @@ public class StateRepresentation {
     	if(linearIndex == 0)return Environment.maximumReward;
     	else return Environment.minimumReward;
     }
+
+    
+    public boolean isGoalState(int linearIndex){
+    	return (linearIndex == 0);
+    }
     
     /**
      * Provides the relative distance for two positions

@@ -30,7 +30,7 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         this.nrRuns = nrRuns;
         this.tau = tau;
         representation = new StateRepresentation(init);
-        SARcombis = new ArrayList<>();
+        SARcombis = new ArrayList<SARcombi>();
         myPos = new Position(startPos);
         currentNrRuns = 0;
         this.startPos = new Position(startPos);
@@ -175,7 +175,7 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         }   
        
         ///Empty SAR arrayList for next run.
-        SARcombis = new ArrayList<>();
+        SARcombis = new ArrayList<SARcombi>();
         currentNrRuns++;
     }
     

@@ -43,7 +43,7 @@ public class Environment {
         return predator.getPos();
     }
 
-    private boolean checkForEnd() {
+    public  boolean checkForEnd() {
         isEnded = getPredatorPos().equals(getPreyPos());
         return isEnded;
     }
