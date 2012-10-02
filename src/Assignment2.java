@@ -65,7 +65,7 @@ public class Assignment2 {
         Environment env = new Environment(agent, new Position(5, 5));
         View view = new View(env);
 
-        int nrEpisodes = 10;
+        int nrEpisodes = 5;
         int episodes = 0;
         do {
             env.doRun();
