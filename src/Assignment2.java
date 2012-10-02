@@ -31,9 +31,9 @@ public class Assignment2 {
         return variance;
     }
 
-    public void onPolicyMonteCarlo(double tau, int nrRuns, double init) {
+    public void onPolicyMonteCarlo(double tau, int nrRuns, double init, double discount) {
         //double tau, int nrRuns, double init, Position startPos, Position startPosPrey
-        PredatorOnPolicyMonteCarlo agent = new PredatorOnPolicyMonteCarlo(tau, nrRuns, init, new Position(0, 0), new Position(5, 5));
+        PredatorOnPolicyMonteCarlo agent = new PredatorOnPolicyMonteCarlo(tau, nrRuns, init, new Position(0, 0), new Position(5, 5), discount);
         Environment env = new Environment(agent, new Position(5, 5));
         View view = new View(env);
         int runNr = 0;
@@ -44,13 +44,13 @@ public class Assignment2 {
                 System.out.println(runNr);
             }
             agent.learnAfterEpisode();
-        } while (!agent.isConverged());
-        env.reset();
-        view.print();
+            env.reset();
+        } while (!agent.isConverged());        
+//        view.printSimple();
         while (!env.isEnded()) {
             env.nextTimeStep();
-            view.print();
-        }
+//            view.printSimple();
+        }        
         agent.printQValues(false, -1);
 
     }
@@ -79,14 +79,13 @@ public class Assignment2 {
             env.nextTimeStep();
             view.print();
         }
-
         agent.printQValues(false, -1);
     }
 
     public static void main(String[] args) {
         Assignment2 a = new Assignment2();
-       //a.onPolicyMonteCarlo(0.8, 100, 15);
-        a.firstMust();
+       a.onPolicyMonteCarlo(0.8, 200, 15, 0.9);
+//        a.firstMust();
         // a.secondMust();
         // a.firstShould();
         // a.secondShould();

@@ -23,11 +23,13 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
     private int state;
     private StateRepresentation.Action currentAction;
     private ArrayList<ArrayList<ArrayList<Double>>> rewards;
+    private double discountFactor;
     
     
     //Policy is impliciet vastgelegd in statespaceRepresentation
-    public PredatorOnPolicyMonteCarlo(double tau, int nrRuns, double init, Position startPos, Position startPosPrey){
+    public PredatorOnPolicyMonteCarlo(double tau, int nrRuns, double init, Position startPos, Position startPosPrey, double discount){
         this.nrRuns = nrRuns;
+        discountFactor = discount;
         this.tau = tau;
         representation = new StateRepresentation(init);
         SARcombis = new ArrayList<SARcombi>();
@@ -103,9 +105,9 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
     @Override
     public void observeReward(double reward, Position prey) {
         int [] reldis = representation.getRelDistance(myPos, prey);
-        preyPos = new Position(prey);
+        preyPos = new Position(prey);        
+        SARcombis.add(new SARcombi(state, currentAction, reward));   
         state = representation.relDistanceToLinearIndex(reldis[0], reldis[1]);
-        SARcombis.add(new SARcombi(state, currentAction, reward));        
     }
 
     private boolean contains(int[][] stateActionPairs, SARcombi sar) {
@@ -151,7 +153,8 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
             if(!contains(stateActionPairs,SARcombis.get(i))){
                 R = SARcombis.get(i).getReward();
                 for(int j = i+1; j<SARcombis.size();j++){
-                    R+=SARcombis.get(j).getReward();
+                    double discountTotal = Math.pow(discountFactor, j-i);
+                    R+=discountTotal*SARcombis.get(j).getReward();
                 }
                 int stateCurrent =SARcombis.get(i).getState();
                 int actionCurrent = SARcombis.get(i).getAction().getIntValue();
@@ -170,7 +173,12 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
                     total+= rewardsOfCombi.get(j);
                 }
                 total = total/rewardsOfCombi.size();
-                representation.setValue(stateActionPairs[i][0], StateRepresentation.returnAction(stateActionPairs[i][1]), total);
+                if(stateActionPairs[i][0]!=0){
+                    representation.setValue(stateActionPairs[i][0], StateRepresentation.returnAction(stateActionPairs[i][1]), total);
+                }
+                else{
+                    representation.setValue(stateActionPairs[i][0], StateRepresentation.returnAction(stateActionPairs[i][1]), 0.0);
+                }
             }
         }   
        
@@ -194,4 +202,5 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
             representation.printForOneAction(latex, action);
         }
     }
+    
 }

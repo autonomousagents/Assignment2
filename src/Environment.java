@@ -14,7 +14,7 @@ public class Environment {
     private Agent predator;
     private Agent prey;
     private int predatorType = -1;
-    public static final double maximumReward = 15;
+    public static final double maximumReward = 10;
     public static final double minimumReward = 0;
     public static final double normalReward = 0;
 

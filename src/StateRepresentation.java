@@ -298,6 +298,33 @@ public class StateRepresentation {
     
   //Determines in which wind direction the prey is located
     private Direction getDirection(Position predator, Position prey){
+        int horizontalDiff = 5 - prey.getX();
+        for(int i = 0; i<Math.abs(horizontalDiff);i++){
+            if (horizontalDiff < 0){
+                prey.adjustPosition(3);
+                predator.adjustPosition(3);
+            }
+            else{
+                prey.adjustPosition(1);
+                predator.adjustPosition(1);
+            }
+        }
+        int verticalDiff = 5 - prey.getY();
+        for(int i = 0; i<Math.abs(verticalDiff);i++){
+                if (verticalDiff < 0){
+                    prey.adjustPosition(0);
+                    predator.adjustPosition(0);
+                }
+                else{
+                    prey.adjustPosition(2);
+                    predator.adjustPosition(2);
+                }
+        }
+//        System.out.print("relative prey pos = ");
+//        prey.printPosition();
+//        System.out.print("relative pred pos = ");
+//        predator.printPosition();
+        
     	if(prey.getX()>=predator.getX()){
     		if(prey.getY()>=predator.getY()){
     			if(predator.getX()>=predator.getY()){
@@ -342,67 +369,79 @@ public class StateRepresentation {
      * @param stateRepMove = action in state space
      * @return action in real world
      */
-    public int getMove(Position predator, Position prey, int stateRepMove) {
-		Direction direction = getDirection(predator, prey);
-		switch(direction){
-		case NNW:
+    public int getMove(Position predator, Position prey, int stateRepMove) { 
+                if(stateRepMove == 4){
+                    return 4;
+                }
+		int directionRel = getDirection(new Position(predator), new Position(prey)).getIndex();
+                int ToBReturned=-1;
+		switch(directionRel){
+		case 5:
 			
 			switch(stateRepMove){
-			case 0:return 1;
-			case 1:return 3;
-			case 2:return 2; 
-			case 3:return 0;
+			case 0: ToBReturned = 1; break;
+			case 1:ToBReturned = 3;break;
+			case 2:ToBReturned = 2; break;
+			case 3:ToBReturned = 0;break;
 			}
-		case NNO:
+		case 6:
 			switch(stateRepMove){
-			case 0:return 3;
-			case 1:return 1;
-			case 2:return 2;
-			case 3:return 0;
+			case 0:ToBReturned = 3;break;
+			case 1:ToBReturned = 1;break;
+			case 2:ToBReturned = 2;break;
+			case 3:ToBReturned = 0;break;
 			}
-		case ONO:
+		case 7:
 			switch(stateRepMove){
-			case 0:return 2;
-			case 1:return 0;
-			case 2:return 3;
-			case 3:return 1;
+			case 0:ToBReturned = 2;break;
+			case 1:ToBReturned = 0;break;
+			case 2:ToBReturned = 3;break;
+			case 3:ToBReturned = 1;break;
 			}
-		case OZO:
+		case 8:
 			switch(stateRepMove){
-			case 0:return 0;
-			case 1:return 2;
-			case 2:return 3;
-			case 3:return 1;
+			case 0:ToBReturned = 0;break;
+			case 1:ToBReturned = 2;break;
+			case 2:ToBReturned = 3;break;
+			case 3:ToBReturned = 1;break;
 			}
-		case ZZO:
+		case 9:
 			switch(stateRepMove){
-			case 0:return 3;
-			case 1:return 1;
-			case 2:return 0;
-			case 3:return 2;
+			case 0:ToBReturned = 3;break;
+			case 1:ToBReturned = 1;break;
+			case 2:ToBReturned = 0;break;
+			case 3:ToBReturned = 2;break;
 			}
-		case ZZW:
+		case 10:
 			switch(stateRepMove){
-			case 0:return 1;
-			case 1:return 3;
-			case 2:return 0;
-			case 3:return 2;
+			case 0:ToBReturned = 1;break;
+			case 1:ToBReturned = 3;break;
+			case 2:ToBReturned = 0;break;
+			case 3:ToBReturned = 2;break;
 			}
-		case WZW:
+		case 11:
 			switch(stateRepMove){
-			case 0:return 0;
-			case 1:return 2;
-			case 2:return 1;
-			case 3:return 3;
+			case 0:ToBReturned = 0;break;
+			case 1:ToBReturned = 2;break;
+			case 2:ToBReturned = 1;break;
+			case 3:ToBReturned = 3;break;
 			}
-		case WNW:
+		case 12:
 			switch(stateRepMove){
-			case 0:return 2;
-			case 1:return 0;
-			case 2:return 1;
-			case 3:return 3;
+			case 0:ToBReturned = 2;break;
+			case 1:ToBReturned = 0;break;
+			case 2:ToBReturned = 1;break;
+			case 3:ToBReturned = 3;break;
 			}
 		}
-		return -1;
+//                if(print){
+//                    System.out.print("prey: ");
+//                    prey.printPosition();
+//                    System.out.print("predator: ");
+//                    predator.printPosition();
+//                    System.out.println("Direction = "+directionRel+" Action = "+returnAction(stateRepMove)+" Real action = "+ToBReturned+"\n");
+//                }
+		return ToBReturned;
+                
 	}
 }

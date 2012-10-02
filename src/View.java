@@ -44,6 +44,28 @@ public class View {
         world[env.getPredatorPos().getY()][env.getPredatorPos().getX()] = EMPTY;
         world[env.getPreyPos().getY()][env.getPreyPos().getX()] = EMPTY;
     }
+    
+    /*
+     * /prints the environment the way it is
+     */
+    public void printSimple(){
+        for(int i =0;i<Environment.HEIGHT;i++){
+            for(int j = 0; j<Environment.WIDTH;j++){
+                if(env.getPreyPos().equals(new Position(j,i))){
+                    System.out.print(PREY);
+                }
+                else if(env.getPredatorPos().equals(new Position(j,i))){
+                    System.out.print(PREDATOR);
+                }
+                else{
+                    System.out.print(EMPTY);
+                }
+                System.out.print(" ");
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+    }
 
     private void fill() {
         for (String[] row : world) {

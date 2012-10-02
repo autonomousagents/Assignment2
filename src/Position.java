@@ -79,16 +79,20 @@ public class Position {
     public void adjustPosition(int move) {
         switch(move){
         //Up
-        case 0: y = (y +Environment.HEIGHT-1)% Environment.HEIGHT;
+        case 0: y = (y +Environment.HEIGHT-1)% Environment.HEIGHT;break;
         //Right
-        case 1: x = (x +Environment.WIDTH+1) % Environment.WIDTH;
+        case 1: x = (x +Environment.WIDTH+1) % Environment.WIDTH;break;
         //Down
-        case 2: y = (y +Environment.HEIGHT+1)% Environment.HEIGHT;
+        case 2: y = (y +Environment.HEIGHT+1)% Environment.HEIGHT;break;
         //Left
-        case 3: x = (x +Environment.WIDTH-1) % Environment.WIDTH;
+        case 3: x = (x +Environment.WIDTH-1) % Environment.WIDTH;break;
         //Wait
         case 4: return;
         }
+    }
+    
+    public void printPosition (){
+        System.out.println("x = "+ x + ", y = "+y);
     }
 	
 }
