@@ -57,7 +57,7 @@ public class Environment {
     }
 
     public static double reward(Position prey, Position predator) {
-        if (prey.getX() == predator.getX() && prey.getY() == predator.getY()) {
+        if (predator.equals(prey)) {
             return maximumReward;
         }
         else {

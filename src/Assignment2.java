@@ -70,22 +70,24 @@ public class Assignment2 {
         do {
             env.doRun();
             episodes++;
-        } while (episodes < (nrEpisodes - 1));
+            System.out.println("=============");
+           agent.printQValues(false, -1);
+        } while (episodes < (nrEpisodes ));
 
         // show last episode
-        env.reset();
-        view.print();
-        while (!env.isEnded()) {
-            env.nextTimeStep();
-            view.print();
-        }
-        agent.printQValues(false, -1);
+//        env.reset();
+//        view.print();
+//        while (!env.isEnded()) {
+//            env.nextTimeStep();
+//            view.print();
+//        }
+//        agent.printQValues(false, -1);
     }
 
     public static void main(String[] args) {
         Assignment2 a = new Assignment2();
-       a.onPolicyMonteCarlo(0.8, 200, 15, 0.9);
-//        a.firstMust();
+      // a.onPolicyMonteCarlo(0.8, 200, 15, 0.9);
+        a.firstMust();
         // a.secondMust();
         // a.firstShould();
         // a.secondShould();

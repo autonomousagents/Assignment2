@@ -11,8 +11,9 @@ public class PredatorQLearning implements Agent {
     private StateRepresentation stateSpace;
     private static final double initialValue = 15;
     private Position oldPos;
-    private final double doubleComparisonEpsilon = 0.0001;
-    private StateRepresentation.Action currentAction;
+    private Position oldPreyPos;
+    private final double doubleComparisonEpsilon = 0.000001;
+    private StateRepresentation.Action oldAction;
     private double currentReward;
     private int oldState;
     
@@ -26,6 +27,8 @@ public class PredatorQLearning implements Agent {
         this.myPos = new Position(startPos);
         stateSpace = new StateRepresentation(initialValue);
 
+        for (int i=0; i < StateRepresentation.nrActions; i++)
+            stateSpace.setValue(0, StateRepresentation.returnAction(i), 0);
 
     }
 
@@ -38,15 +41,15 @@ public class PredatorQLearning implements Agent {
     private double getBestActionValue(Position other) {
 
         int[] reldistance = stateSpace.getRelDistance(myPos, other);
-        int linearIndex = StateRepresentation.relDistanceToLinearIndex(reldistance[0], reldistance[1]);
+        int currentState = StateRepresentation.relDistanceToLinearIndex(reldistance[0], reldistance[1]);
 
-        double[] actionvalues = stateSpace.getStateActionPairValues(linearIndex);
+        double[] actionvalues = stateSpace.getStateActionPairValues(currentState); // return stateRep[pos.getY()][pos.getX()];
         double bestActionValue = Environment.minimumReward;
 
         //get best action value
         for (int i = 0; i < StateRepresentation.nrActions; i++) {
 
-            System.out.println("action value of "+StateRepresentation.Action.actionNames[i]+" = " + String.format("%.3f",actionvalues[i]));
+            //System.out.println("action value of "+StateRepresentation.Action.actionNames[i]+" = " + String.format("%.3f",actionvalues[i]));
 
             if (actionvalues[i] > bestActionValue) {
                 bestActionValue = actionvalues[i];
@@ -71,32 +74,43 @@ public class PredatorQLearning implements Agent {
      */
     public void observeReward(double reward, Position other) {
 
-      //  if (myPos.equals(other)) {
-       //     return;
-       // }
-
-        System.out.println("observe reward");
+        
+      //  System.out.println("oldState: " + oldState + " oldAction: " + oldAction);
 
         currentReward = reward;
-
         // new state
         // int[] reldis = stateSpace.getRelDistance(myPos, other);
         //int newState = StateRepresentation.relDistanceToLinearIndex(reldis[0], reldis[1]);
 
         // old state
-        int[] reldisOld = stateSpace.getRelDistance(oldPos, other);
-        oldState = StateRepresentation.relDistanceToLinearIndex(reldisOld[0], reldisOld[1]);
+//        int[] reldisOld = stateSpace.getRelDistance(oldPos, other);
+//        oldState = StateRepresentation.relDistanceToLinearIndex(reldisOld[0], reldisOld[1]);
 
 
 
-        double oldQValue = stateSpace.getValue(oldState, currentAction);
+        double oldQValue = stateSpace.getValue(oldState, oldAction);
 
         double maxActionValue = getBestActionValue(other);
 
+         // if (myPos.equals(other))
+           //   maxActionValue=0;
         double TDvalue = alpha * (currentReward + (gamma * (maxActionValue - oldQValue)));
         double newQValue = oldQValue + TDvalue;
-        stateSpace.setValue(oldState, currentAction, newQValue);
-
+      //  if (myPos.equals(other)) {
+      //     System.out.println("on goal");
+      //
+      //  }
+        //System.out.println("TD value:" + TDvalue);
+      //  System.out.println("max action value:" + maxActionValue);
+        
+        stateSpace.setValue(oldState, oldAction, newQValue);
+        
+        if (newQValue != 15)
+            System.out.println(//"(set pred pos " + stateSpace.linearIndexToPosition(oldState).getX() + ","+ stateSpace.linearIndexToPosition(oldState).getY() + ")" +
+                                "(Statenr: " + oldState + ") " +
+                              "set pred pos " + oldPos.getX() + ","+ oldPos.getY() +
+                                " and prey pos " + oldPreyPos.getX() + ","+ oldPreyPos.getY() +
+                                " and action " + oldAction + " to value " + newQValue);
         //currentState = newState;
     }
 
@@ -105,18 +119,22 @@ public class PredatorQLearning implements Agent {
         int linearIndex = StateRepresentation.relDistanceToLinearIndex(reldistance[0], reldistance[1]);
         StateRepresentation.Action action;
 
-        //remember oldState
+        // remember oldState
         oldPos = new Position(myPos);
-
+        oldPreyPos=other;
+       // int[] reldisOld = stateSpace.getRelDistance(oldPos, other);
+        oldState = linearIndex;
 
         //epsilon greedy
         if (Math.random() <= epsilon) {
             //falls within epsilon
             //return uniformly random action
+           
             action = StateRepresentation.returnAction((int) (Math.random() * Direction.nrMoves));
+          //   System.out.println("RANDOM action: " + action);
         }
         else {
-
+             //System.out.println("non-RANDOM action");
             //falls outside epsilon
             ArrayList<StateRepresentation.Action> bestActions = new ArrayList<StateRepresentation.Action>();
 
@@ -149,9 +167,9 @@ public class PredatorQLearning implements Agent {
     @Override
     public void doMove(Position other) {
 
-        currentAction = pickEpsilonGreedyAction(other);
+        oldAction = pickEpsilonGreedyAction(other);
 
-        int actionNumber = stateSpace.getMove(myPos, other, currentAction.getIntValue());
+        int actionNumber = stateSpace.getMove(myPos, other, oldAction.getIntValue());
         myPos.adjustPosition(actionNumber);
     }
 
