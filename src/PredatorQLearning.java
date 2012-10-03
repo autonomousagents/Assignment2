@@ -334,6 +334,11 @@ public class PredatorQLearning implements Agent {
     	maxChange= m;
     }
 
+
+    public double getOldLargestChange() {
+        return oldLargestChange;
+    }
+    
     @Override
     public boolean isConverged() {
         // TODO Auto-generated method stub

@@ -13,25 +13,48 @@ import java.util.Scanner;
  */
 public class Assignment2 {
 	
-	private double bestStateRep[][][];
+	private StateRepresentation bestStateRep;
 
     public Assignment2() {
-    	
-    	bestStateRep = new double[StateRepresentation.stateRepHeight][StateRepresentation.stateRepWidth][StateRepresentation.nrActions];
-         
+
+        bestStateRep = new StateRepresentation(-1);
+        readBestStateRep("Assignment2/src/qLearning_11_million_episodes.txt");
     }
 
-    public void start() {
-    }
-    
-    
+  
+
+    /**
+     * Made to process a file were each staterep-traingle of doubles if precede by "Action = ..."
+     *
+     * @param filename
+     */
     public void readBestStateRep(String filename) {
     	try {
-    	Scanner scanner = new Scanner(new File(filename));
-   
-    	while(scanner.hasNextDouble()){
-    	   double number = scanner.nextDouble();
-    	}
+            Scanner scanner = new Scanner(new File(filename));
+            
+            int stateNumber=0;
+            int actionNumber=0;
+
+            while(scanner.hasNext() && actionNumber < StateRepresentation.nrActions){
+
+                String notAction = scanner.next();
+                while(!notAction.equals("Action")) {
+                     notAction = scanner.next();
+                  //  System.out.println(notAction);
+                }
+                scanner.nextLine(); // vb. " = Hor.Approach"
+
+                while(scanner.hasNextDouble()){
+                   double stateActionValue = scanner.nextDouble();
+                  // System.out.println(stateActionValue + " at state " + stateNumber + " action " + actionNumber);
+
+                   bestStateRep.setValue(stateNumber, StateRepresentation.Action.actionValues[actionNumber], stateActionValue);
+                   stateNumber++;
+                }
+
+                stateNumber=0;
+                actionNumber++;
+            }
     	}
     	catch(FileNotFoundException e) {
     		System.out.println(" File "  + filename + " not found!");
@@ -81,21 +104,29 @@ public class Assignment2 {
 
     }
 
+
+
     /**
      * Q-Learning
+     */
+    /**
+     * 11 758 700  episodes wehere agent = new PredatorQLearning(0.9, 0.5, 0.01, 0.1, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
      */
     public void firstMust() {
 
     	//double gamma, double alpha,  double maxChange, double a.s.Parameter, ActionSelection actionSelectionMethod, Position startPos
-        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.001, 0.2, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0)); 
+        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.01, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
         Environment env = new Environment(agent, new Position(5, 5));
         View view = new View(env);
 
-        int nrEpisodes = 2000;
+      //  int nrEpisodes = 2000;
         int episodes = 0;
         do {
             env.doRun();
             episodes++;
+            // if (episodes % 100 == 0) {
+             //   System.out.println(String.format("%.5f",agent.getOldLargestChange()));
+           // }
         } while (! agent.isConverged());
         System.out.println(" Took "  +  episodes + "  episodes to converge." );
 //        show last episode
