@@ -15,8 +15,9 @@ public class StateRepresentation {
     public static final int stateRepHeight = Math.round(Environment.HEIGHT/2)+1;
     public static final int nrActions = Action.nrActions;
     public static final int nrStates = 21;
-    private double initialValue;
-    
+    public static final int nrStateActionPairs = nrStates * nrActions;
+
+    private double absentValue =  Environment.maximumReward+ 1;
     /**
      * Constructor which initializes the state space representation
      */
@@ -187,7 +188,7 @@ public class StateRepresentation {
     	for(int i = 0;i<stateRepHeight;i++){
     		for(int j = i+1;j<stateRepWidth;j++){
     			for(int k = 0;k<nrActions;k++)
-    			stateRep[i][j][k] =  -1.0;
+    			stateRep[i][j][k] =  absentValue;
     		}
     	}
     }
@@ -223,7 +224,7 @@ public class StateRepresentation {
                 System.out.println("Action = " + Action.actionNames[k]);
                 for(int i =0;i<stateRepHeight;i++){
                     for(int j = 0; j<stateRepWidth;j++){
-                        if(stateRep[i][j][k]!=-1){
+                        if(stateRep[i][j][k]!=absentValue){
                             System.out.print(String.format("%.4f",stateRep[i][j][k]));
                         }
                         if(j==stateRepWidth-1){
@@ -242,7 +243,7 @@ public class StateRepresentation {
                 System.out.println("Action = " + Action.actionNames[k]);
                 for(int i =0;i<stateRepHeight;i++){
                     for(int j = 0; j<stateRepWidth;j++){
-                        if(stateRep[i][j][k]!=-1){
+                        if(stateRep[i][j][k]!=absentValue){
                             System.out.print(String.format("%.4f", stateRep[i][j][k]));
                         }
                         if(j==stateRepWidth-1){
@@ -258,12 +259,14 @@ public class StateRepresentation {
         }
     }
     
+ 
+    
     public void printForOneAction (boolean latex, int action){
         if(latex){ 
             System.out.println("Action = " + Action.actionNames[action]);
             for(int i =0;i<stateRepHeight;i++){
                 for(int j = 0; j<stateRepWidth;j++){
-                    if(stateRep[i][j][action]!=-1){
+                    if(stateRep[i][j][action]!=absentValue){
                         System.out.print(stateRep[i][j][action]);
                     }
                     if(j==stateRepWidth-1){
@@ -280,7 +283,7 @@ public class StateRepresentation {
             System.out.println("Action = " + Action.actionNames[action]);
             for(int i =0;i<stateRepHeight;i++){
                 for(int j = 0; j<stateRepWidth;j++){
-                    if(stateRep[i][j][action]!=-1){
+                    if(stateRep[i][j][action]!=absentValue){
                         System.out.print(stateRep[i][j][action]);
                     }
                     if(j==stateRepWidth-1){

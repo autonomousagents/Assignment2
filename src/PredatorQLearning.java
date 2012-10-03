@@ -1,15 +1,16 @@
 
 import java.util.ArrayList;
 
+
 public class PredatorQLearning implements Agent {
 
     private double gamma;
     private double alpha;
-    private double epsilon;
+   // private double epsilon;
     private Position myPos;
     private Position startPos;
     private StateRepresentation stateSpace;
-    private static final double initialValue = 15;
+    private double initialValue = 15;
     private Position oldPos;
     private Position oldPreyPos;
     private final double doubleComparisonEpsilon = 0.000001;
@@ -17,22 +18,118 @@ public class PredatorQLearning implements Agent {
     private double currentReward;
     private int oldState;
     private int oldActionNumber;
+    
+    private double largestChange;
+    private double oldLargestChange;
+    private double maxChange;
 
     private int currentState;
     
-    private int nrRuns, currentNrRuns;
+    private ActionSelection actionSelectionMethod;
+    private double actionSelectionParameter;
+    
+    private int nrStateActionPairsVisited;
+    private boolean allStateActionPairsVisited;
+    private ArrayList<StateActionPair> stateActionPairsVisited;
 
-    public PredatorQLearning(double gamma, double alpha, double epsilon, Position startPos) {
+    private class StateActionPair {
+    	public int stateNr;
+    	public int actionNr;
+    	
+    	public StateActionPair (int s, int a) {
+    		stateNr=s;
+    		actionNr=a;
+    	}
+    	
+		@Override
+		public int hashCode() {		
+			return actionNr + (stateNr * (StateRepresentation.nrActions));
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			StateActionPair other = (StateActionPair) obj;
+			if (!getOuterType().equals(other.getOuterType()))
+				return false;
+			if (actionNr != other.actionNr)
+				return false;
+			if (stateNr != other.stateNr)
+				return false;
+			return true;
+		}
+		private PredatorQLearning getOuterType() {
+			return PredatorQLearning.this;
+		}
+    	
+    	
+    }
+    
+    public enum ActionSelection {
+
+    	epsilonGreedy(0),
+    	softmax(1);
+        
+    	public  final static ActionSelection[]  actionSelectionValues = ActionSelection.values();
+    	
+
+    	private int i;
+    	
+    	ActionSelection(int index){
+    		i = index;
+    	}
+        
+    	int getIntValue(){
+    		return i;
+    	}
+    }
+    
+
+    public PredatorQLearning(double gamma, double alpha, double maxChange, double actionSelectionParameter,  ActionSelection a, Position startPos) {
         this.gamma = gamma;
         this.alpha = alpha;
-        this.epsilon = epsilon;
+        this.actionSelectionParameter = actionSelectionParameter;
         this.startPos = new Position(startPos);
         this.myPos = new Position(startPos);
+        this.largestChange = 0;
+        this.maxChange = maxChange;
+        this.actionSelectionMethod =  a;
         stateSpace = new StateRepresentation(initialValue);
-
+        nrStateActionPairsVisited=0;
+        allStateActionPairsVisited=false;
+        
+        stateActionPairsVisited = new ArrayList<StateActionPair>();
+        
         for (int i=0; i < StateRepresentation.nrActions; i++)
             stateSpace.setValue(0, StateRepresentation.returnAction(i), 0);
 
+    }
+    
+    public void setInitialValue(double iV) {
+    	initialValue=iV;
+    }
+    
+    public double getInitialValue() {
+    	return initialValue;
+    }
+    
+    public void setActionSelectionParameter(double as) {
+    	actionSelectionParameter=as;
+    }
+    public double getActionSelectionParameter() {
+    	return actionSelectionParameter;
+    }
+    
+    public void setActionSelectionMethod(ActionSelection a) {
+    	actionSelectionMethod = a;
+    }
+    public ActionSelection getActionSelectionMethod() {
+    	return actionSelectionMethod;
     }
 
     /**
@@ -86,25 +183,82 @@ public class PredatorQLearning implements Agent {
         double maxActionValue = getBestActionValue(other);
 
      
-        double TDvalue = alpha * (currentReward + (gamma * (maxActionValue - oldQValue)));
-        double newQValue = oldQValue + TDvalue;
-
-
+        double TDvalue = alpha * (currentReward + (gamma * maxActionValue) - oldQValue);
+        double newQValue = oldQValue + TDvalue;      
         
         stateSpace.setValue(oldState, oldAction, newQValue);
 
       //  System.out.println("old state: " + oldState);
-        if (newQValue != 15)
-            System.out.println(//"(set pred pos " + stateSpace.linearIndexToPosition(oldState).getX() + ","+ stateSpace.linearIndexToPosition(oldState).getY() + ")" +
-                                "(Statenr: " + oldState + ") " +                              
-                              "set pred pos " + oldPos.getX() + ","+ oldPos.getY() +
-                                " and prey pos " + oldPreyPos.getX() + ","+ oldPreyPos.getY() +
-                                " and action " + oldAction +
-                                  " (oldAction nr.:" + oldActionNumber + ") " +
-                                  " to value " + newQValue +
-                                  "\nNew pos is: Predator: " + myPos.getX() + "," + myPos.getY() + " , Prey: " + other.getX() + "," + other.getY() +
-                                  " (new Statenr is " + currentState + ")");
-
+     //  if (newQValue != 15)
+//            System.out.println(//"(set pred pos " + stateSpace.linearIndexToPosition(oldState).getX() + ","+ stateSpace.linearIndexToPosition(oldState).getY() + ")" +
+//                                "(Statenr: " + oldState + ") " +                              
+//                              "set pred pos " + oldPos.getX() + ","+ oldPos.getY() +
+//                                " and prey pos " + oldPreyPos.getX() + ","+ oldPreyPos.getY() +
+//                                " and action " + oldAction +
+//                                  " (oldAction nr.:" + oldActionNumber + ") " +
+//                                  " to value " + newQValue +
+//                                  "\nNew pos is: Predator: " + myPos.getX() + "," + myPos.getY() + " , Prey: " + other.getX() + "," + other.getY() +
+//                                  " (new Statenr is " + currentState + ")");
+        
+        double change = Math.abs(newQValue - oldQValue);
+        if (change > largestChange)
+        	largestChange=change;
+        
+        StateActionPair saP = new StateActionPair(oldState, oldAction.getIntValue());
+        if (!allStateActionPairsVisited && !stateActionPairsVisited.contains(saP)){ 
+        	stateActionPairsVisited.add(saP);
+        	nrStateActionPairsVisited++;
+        }
+        if(!allStateActionPairsVisited){
+        	allStateActionPairsVisited = (nrStateActionPairsVisited == (StateRepresentation.nrStateActionPairs - StateRepresentation.nrActions));
+        }
+    }
+    
+    public boolean allStatesVisited(){
+    	return allStateActionPairsVisited;
+    } 
+    
+    public StateRepresentation.Action pickAction(Position other) {
+    	switch (actionSelectionMethod) {
+    		case epsilonGreedy : return pickEpsilonGreedyAction(other);
+    		case softmax : return pickSoftmaxAction(other);
+    		default: return null;
+    	}
+    }
+    
+    public StateRepresentation.Action pickSoftmaxAction(Position other) {
+    	
+    	int[] reldistance = stateSpace.getRelDistance(myPos, other);
+        int state = StateRepresentation.relDistanceToLinearIndex(reldistance[0], reldistance[1]);
+        
+        //vraag action values op
+        double[] values = stateSpace.getStateActionPairValues(state);
+        //bereken kansen
+        //calculate total
+        double total =0.0;
+        for(int i = 0; i< StateRepresentation.nrActions;i++){
+            total += Math.exp(values[i]/actionSelectionParameter);
+        }
+        //calculate probability per action
+        double[] probabilities = new double [StateRepresentation.nrActions];
+        for(int i = 0; i< StateRepresentation.nrActions;i++){
+            probabilities[i] = Math.exp(values[i]/actionSelectionParameter)/total;
+        }
+        //Make probabilities cumulative
+        for(int i = 1; i< StateRepresentation.nrActions-1;i++){
+            probabilities[i] = probabilities[i]+probabilities[i-1];
+        }
+        probabilities[StateRepresentation.nrActions-1] = 1.0;
+        //trek waarde
+        double p = Math.random();
+        //bepaal actie, sla op en voer uit
+        for(int i = 0;i<StateRepresentation.nrActions;i++){
+            if(p<=probabilities[i]){
+                return StateRepresentation.Action.actionValues[i];
+            }
+        }
+    	
+    	return null;
     }
 
     public StateRepresentation.Action pickEpsilonGreedyAction(Position other) {
@@ -118,7 +272,7 @@ public class PredatorQLearning implements Agent {
         oldState = linearIndex;
 
         //epsilon greedy
-        if (Math.random() <= epsilon) {
+        if (Math.random() <= actionSelectionParameter) {
             //falls within epsilon
             //return uniformly random action           
             action = StateRepresentation.returnAction((int) (Math.random() * Direction.nrMoves));
@@ -128,7 +282,7 @@ public class PredatorQLearning implements Agent {
             ArrayList<StateRepresentation.Action> bestActions = new ArrayList<StateRepresentation.Action>();
 
             double[] actionvalues = stateSpace.getStateActionPairValues(linearIndex);
-            double bestActionValue = Environment.minimumReward;
+            double bestActionValue = Math.min(Environment.minimumReward, initialValue);
 
             //get all greedy actions
             for (int i = 0; i < StateRepresentation.nrActions; i++) {
@@ -156,7 +310,7 @@ public class PredatorQLearning implements Agent {
     @Override
     public void doMove(Position other) {
 
-        oldAction = pickEpsilonGreedyAction(other); // HA, HR, VA, etc.
+        oldAction = pickAction(other); // HA, HR, VA, etc.
 
         oldActionNumber = stateSpace.getMove(myPos, other, oldAction.getIntValue(),false);
         myPos.adjustPosition(oldActionNumber);
@@ -170,13 +324,20 @@ public class PredatorQLearning implements Agent {
 
     @Override
     public void reset() {
+    	oldLargestChange=largestChange;
+    	largestChange=0;
         myPos = new Position(startPos);
+
+    }
+    
+    public void setMaxChange(double m) {
+    	maxChange= m;
     }
 
     @Override
     public boolean isConverged() {
         // TODO Auto-generated method stub
-        return false;
+        return oldLargestChange <= maxChange;
     }
 
     public void printQValues(boolean latex, int action) {

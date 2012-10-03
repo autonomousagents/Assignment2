@@ -121,34 +121,6 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         }
         return false;
     }
-
-    @Override
-    public double[] policy(Position prey, Position predator) {
-        String[] actionNamesStateRep= StateRepresentation.Action.actionNames;
-        Direction[] actionNamesReal = Direction.enumValues;
-        int[] relDis = representation.getRelDistance(predator, prey);
-        int currentState = representation.relDistanceToLinearIndex(relDis[0], relDis[1]);
-        //vraag action values op
-        double[] values = representation.getStateActionPairValues(currentState);
-        //bereken kansen
-        //calculate total
-        double total =0.0;
-        for(int i = 0; i< StateRepresentation.nrActions;i++){
-            total += Math.exp(values[i]/tau);
-        }
-        //calculate probability per action
-        double[] probabilities = new double [StateRepresentation.nrActions];
-        for(int i = 0; i< StateRepresentation.nrActions;i++){
-            probabilities[i] = Math.exp(values[i]/tau)/total;
-        }
-        //convert to real worldword actions
-        double[]probabilitiesRealWorld = new double [StateRepresentation.nrActions];
-        for(int i = 0; i< StateRepresentation.nrActions;i++){
-            int realWorldAction = representation.getMove(predator, prey, i, false);            
-            probabilitiesRealWorld[realWorldAction] = probabilities[i];
-        }
-       return probabilitiesRealWorld;
-    }
     
     
     private class SARcombi{

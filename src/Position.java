@@ -47,7 +47,8 @@ public class Position {
 	public boolean equals(Position other){
 		return (this.x == other.getX() && this.y == other.getY()) ;
 	}
-        
+	
+	        
     public int relativeDistance (Position other){
         int temp = Math.abs(other.getX()-this.x);
         int horizontal = Math.min(temp, Environment.WIDTH-temp);
