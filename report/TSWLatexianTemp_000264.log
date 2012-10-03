@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.1.5)  3 OCT 2012 15:33
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.1.5)  3 OCT 2012 15:35
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000257.tex"
-(/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000257.tex
+**"/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000264.tex"
+(/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000264.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, nohyphenation, german-x-2009-06-19, ngerman-x-2009-06-19, ancientgreek, ibycus, arabic, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, galician, german, ngerman, monogreek, greek, hungarian, icelandic, indonesian, interlingua, irish, italian, kurmanji, latin, latvian, lithuanian, mongolian, mongolian2a, bokmal, nynorsk, polish, portuguese, romanian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, turkish, ukenglish, ukrainian, uppersorbian, welsh, loaded.
 (/usr/local/texlive/2009/texmf-dist/tex/latex/base/article.cls
@@ -65,8 +65,8 @@ File: pdftex.def 2009/08/25 v0.04m Graphics/color for pdfTeX
 \Gin@req@height=\dimen107
 \Gin@req@width=\dimen108
 )
-No file TSWLatexianTemp_000257.aux.
-\openout1 = `TSWLatexianTemp_000257.aux'.
+No file TSWLatexianTemp_000264.aux.
+\openout1 = `TSWLatexianTemp_000264.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 9.
 LaTeX Font Info:    ... okay on input line 9.
@@ -146,13 +146,13 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 31.
 
 
-LaTeX Warning: Reference `statespaceSymm' on page 1 undefined on input line 38.
+LaTeX Warning: Reference `fig:statespaceSymm' on page 1 undefined on input line 38.
 
 
-LaTeX Warning: Reference `NewStateRep' on page 1 undefined on input line 41.
+LaTeX Warning: Reference `fig:NewStateRep' on page 1 undefined on input line 41.
 
 
-LaTeX Warning: Reference `statespaceSymm' on page 1 undefined on input line 42.
+LaTeX Warning: Reference `fig:statespaceSymm' on page 1 undefined on input line 42.
 
 [1
 
@@ -165,8 +165,8 @@ File: VMatrixNewStateRep.png Graphic file (type png)
 LaTeX Warning: Reference `app:classDiagram' on page 2 undefined on input line 54.
 
 [2] [3 <./statespaceSymm.png (PNG copy)> <./VMatrixNewStateRep.png>]
-No file TSWLatexianTemp_000257.bbl.
-[4] (./TSWLatexianTemp_000257.aux)
+No file TSWLatexianTemp_000264.bbl.
+[4] (./TSWLatexianTemp_000264.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -176,14 +176,14 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
  ) 
 Here is how much of TeX's memory you used:
  1427 strings out of 493848
- 19700 string characters out of 3149208
+ 19716 string characters out of 3149208
  74348 words of memory out of 3000000
  4728 multiletter control sequences out of 15000+200000
  10139 words of font info for 35 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 25i,7n,32p,902b,279s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 25i,7n,32p,910b,279s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on TSWLatexianTemp_000257.pdf (4 pages, 276563 bytes).
+Output written on TSWLatexianTemp_000264.pdf (4 pages, 276563 bytes).
 PDF statistics:
  71 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
