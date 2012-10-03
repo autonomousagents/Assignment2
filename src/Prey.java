@@ -64,6 +64,10 @@ public class Prey implements Agent {
 		
 	}
 
+    public double[] policy(Position prey, Position predator) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     
 
 }

@@ -13,4 +13,6 @@ public interface Agent {
 	
 	public void observeReward(double reward, Position other);
 
+    public double[] policy(Position prey, Position predator);
+
 }

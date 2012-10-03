@@ -32,6 +32,10 @@ public class PredatorQLearning implements Agent {
     private boolean allStateActionPairsVisited;
     private ArrayList<StateActionPair> stateActionPairsVisited;
 
+    public double[] policy(Position prey, Position predator) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     private class StateActionPair {
     	public int stateNr;
     	public int actionNr;
@@ -130,6 +134,15 @@ public class PredatorQLearning implements Agent {
     }
     public ActionSelection getActionSelectionMethod() {
     	return actionSelectionMethod;
+    }
+
+   public double getValueStateAction(int stateNr, StateRepresentation.Action action ) {
+    	return stateSpace.getValue(stateNr, action);
+   }
+
+    public double[] getStateActionPairValues(int linearIndex){
+
+        return stateSpace.getStateActionPairValues(linearIndex);
     }
 
     /**

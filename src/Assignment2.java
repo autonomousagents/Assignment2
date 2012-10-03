@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -101,10 +102,66 @@ public class Assignment2 {
 //            view.printSimple();
         }        
         agent.printQValues(false, -1);
-
+        view.printPolicy(agent, 5, 5);
     }
 
 
+    /**
+     * root mean square error
+     * averaged over state-action pairs
+     * for qlearning comparing
+     */
+    public double calculateRMSE(PredatorQLearning agent) {
+
+        double RMSE=0;
+        double numerator=0;
+
+        for (int stateNr=0; stateNr < StateRepresentation.nrStates; stateNr++) {
+            for(int actionNr=0; actionNr < StateRepresentation.nrActions; actionNr++) {
+
+                double difference = bestStateRep.getValue(stateNr, StateRepresentation.Action.actionValues[actionNr]) -
+                                    agent.getValueStateAction(stateNr, StateRepresentation.Action.actionValues[actionNr] ) ;
+
+                numerator += Math.pow(difference, 2);
+            }
+        }
+        RMSE = Math.sqrt( numerator / StateRepresentation.nrStateActionPairs);
+        return RMSE;
+    }
+
+     public double percentageOptimalAction(PredatorQLearning agent) {
+
+        double nrOptimalAction=0;
+
+        for (int stateNr=0; stateNr < StateRepresentation.nrStates; stateNr++) {
+
+            int bestActionNr1=-1;
+            int bestActionNr2=-1;
+
+            double bestActionValue1 = Math.min(Environment.minimumReward, agent.getInitialValue());
+            double bestActionValue2 = bestActionValue1;
+
+            double values1[] = bestStateRep.getStateActionPairValues(stateNr) ;
+            double values2[] = agent.getStateActionPairValues(stateNr);
+
+            // for both statereps,
+            // just check one, last "best action"
+            for (int actionNr=0; actionNr < StateRepresentation.nrActions; actionNr++) {
+                if (values1[actionNr] > bestActionValue1) {
+                    bestActionValue1 = values1[actionNr];
+                    bestActionNr1 = actionNr;
+                }
+                if (values2[actionNr] > bestActionValue2) {
+                    bestActionValue2 = values2[actionNr];
+                    bestActionNr2 = actionNr;
+                }
+            }
+            if (bestActionNr1 == bestActionNr2)
+                nrOptimalAction++;
+        }
+
+        return (nrOptimalAction /  StateRepresentation.nrStates) * 100;
+    }
 
     /**
      * Q-Learning
@@ -115,7 +172,7 @@ public class Assignment2 {
     public void firstMust() {
 
     	//double gamma, double alpha,  double maxChange, double a.s.Parameter, ActionSelection actionSelectionMethod, Position startPos
-        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.01, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
+        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.05, 0.01, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
         Environment env = new Environment(agent, new Position(5, 5));
         View view = new View(env);
 
@@ -127,6 +184,8 @@ public class Assignment2 {
             // if (episodes % 100 == 0) {
              //   System.out.println(String.format("%.5f",agent.getOldLargestChange()));
            // }
+            System.out.println("RMSE: " + calculateRMSE( agent ));
+            System.out.println("Percentage optimal (same) action: " + percentageOptimalAction(agent));
         } while (! agent.isConverged());
         System.out.println(" Took "  +  episodes + "  episodes to converge." );
 //        show last episode
@@ -157,7 +216,8 @@ public class Assignment2 {
           do {
               env.doRun();
               episodes++;
-              if(episodeAllStatesVisited==-1 && agent.allStatesVisited()) episodeAllStatesVisited = episodes;
+              if(episodeAllStatesVisited==-1 && agent.allStatesVisited())
+                  episodeAllStatesVisited = episodes;
           } while (! agent.isConverged());
           System.out.println(" Took "  +  episodes + "  episodes to converge." );
 //          show last episode
