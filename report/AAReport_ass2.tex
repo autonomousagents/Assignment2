@@ -38,20 +38,17 @@ In this assignment, we used this efficient state space representation for the le
 Figure \ref{statespaceSymm} illustrates that there is a symmetry in the default state space, and thus that there were relatively much values redundantly computed.
 By using this symmetry in the default state space a much smaller state space was achieved. 
 
+Each state represents a distance between the prey and predator. These are represented in the lower left diagonal of a matrix, in which the $x$-axis is the relative horizontal distance in the MDP and the $y$-axis the relative vertical distance in the MDP. This matrix is shown in Figure \ref{NewStateRep}. Combinations of positions of prey and predator for which the horizontal and vertical distances are equal are now treated equivalent. 
+Also two combinations for which the horizontal distance in one equals the vertical distance in the other and vice versa are considered equal. In order to navigate through this state space different actions are required. These are: \textit{horizontal retreat, horizontal approach, vertical retreat, vertical approach}, as illustrated in Figure \ref{statespaceSymm}, and of course the action \textit{wait}. When interacting with the environment these actions are converted into corresponding actions in the real world. This only requires the relative direction of the prey (which is always located at the centre, regardless of its coordinates) with respect to the predator. This is computed by using the difference in location of the prey and predator on the $x$- and $y$-axis.
+
 \begin{figure}[htbp]
         \center{\includegraphics[width=0.8\textwidth]{statespaceSymm.png}}
         \caption{\label{statespaceSymm} The $11 \times 11$ grid divided into eight symmetric pieces, with the corresponding possible moves which are also symmetric.}
-\end{figure}
 
-Each state represents a distance between the prey and predator. These are represented in the lower left diagonal of a matrix, in which the x-axis is the relative horizontal distance in the MDP and the y-axis the relative vertical distance in the MDP. This matrix is shown in Figure \ref{statespaceSymm}. Combinations of positions of prey and predator for which the horizontal and vertical distances are equal are now treated equivalent. 
-Also two combinations for which the horizontal distance in one equals the vertical distance in the other and vice versa are considered equal. In order to navigate through this state space different actions are required. These are: \textit{approach horizontal, retreat horizontal, approach vertical, retreat vertical} and as before \textit{wait}. When interacting with the environment these actions are converted into corresponding actions in the real world. This only requires the relative direction of the prey (which is always located at the centre, regardless of its coordinates) with respect to the predator. This is computed by using the difference in location of the prey and predator on the x- and y-axis.
-
-This reduction in the number of states has lead to output values which can be viewed in the appendix section \ref{app:polEvaluation}. The results show that the algorithm does not converge faster in terms of iterations with the efficient state space than with the default state space with $\theta=0$ and $\gamma=0.8$, the default state space required 111 iterations and the efficient state space required 107. 
-
-\begin{figure}[htbp]
         \center{\includegraphics[width=0.7\textwidth]{VMatrixNewStateRep.png}}
-        \caption{\label{NewStateRep} Colormap of the $V$-values  resulting from Policy Evaluation for $\theta=0$ and $\gamma = 0.8$ \newline using the ``efficient'' state space representation. The brighter the color the higher the corresponding $V$-value. The prey is always located on the (1, 1) coordinate in this state representation.}
+        \caption{\label{NewStateRep} Colormap of $V$-values, the brighter the color the higher the corresponding $V$-value. The prey is always located on the (1, 1) coordinate in this state representation.}
 \end{figure}
+
 
 \subsection{Implementation details}
 This report will not be about our exact code and implementation details. However, a class diagram of our code is provided in Appendix \ref{app:classDiagram}.
