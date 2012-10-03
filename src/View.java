@@ -102,6 +102,7 @@ public class View {
             out.write("imagesc(C, [ min(min(C)), max(max(C)) ] );");
             out.write("colormap(gray);");
             out.write("axis image");
+            out.write("axis off ");
             out.flush();
             fstream.close();
             out.close();

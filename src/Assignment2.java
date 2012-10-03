@@ -104,6 +104,10 @@ public class Assignment2 {
 //          }
           agent.printQValues(false, -1);
     }
+    
+    public void secondMust() {
+    	
+    }
 
     public static void main(String[] args) {
         Assignment2 a = new Assignment2();
