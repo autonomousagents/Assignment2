@@ -59,7 +59,7 @@ This report will not be about our exact code and implementation details. However
 \section{Learning algorithms}
 \subsection{(M) Q-Learning}
 $\epsilon$-greedy: behaves greedily most of the time, but with probability $\epsilon$, instead select an action at random, uniformly, independently of the action-value estimates.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 28}\\ \\
-One step Q-learning:
+One step Q-learning\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 148}:
 \\
 \begin{align*}
 Q(s_t,a_t) & \leftarrow Q(s_t,a_t) + \alpha \left[ r_{t+1} + \gamma \displaystyle\max_a Q(s_{t+1},a) - Q(s_t,a_t) \right]
