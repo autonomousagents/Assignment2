@@ -47,6 +47,7 @@ public class Assignment2 {
             env.reset();
         } while (!agent.isConverged());        
 //        view.printSimple();
+        agent.setPrint(true);
         while (!env.isEnded()) {
             env.nextTimeStep();
 //            view.printSimple();
@@ -65,16 +66,14 @@ public class Assignment2 {
         Environment env = new Environment(agent, new Position(5, 5));
         View view = new View(env);
 
-        int nrEpisodes = 5;
+        int nrEpisodes = 10;
         int episodes = 0;
         do {
             env.doRun();
             episodes++;
-            System.out.println("=============");
-           agent.printQValues(false, -1);
-        } while (episodes < (nrEpisodes ));
+        } while (episodes < (nrEpisodes - 1));
 
-        // show last episode
+//        // show last episode
 //        env.reset();
 //        view.print();
 //        while (!env.isEnded()) {
@@ -86,8 +85,8 @@ public class Assignment2 {
 
     public static void main(String[] args) {
         Assignment2 a = new Assignment2();
-      // a.onPolicyMonteCarlo(0.8, 200, 15, 0.9);
-        a.firstMust();
+       a.onPolicyMonteCarlo(0.8, 15, 15, 0.9);
+//        a.firstMust();
         // a.secondMust();
         // a.firstShould();
         // a.secondShould();

@@ -158,7 +158,7 @@ public class PredatorQLearning implements Agent {
 
         oldAction = pickEpsilonGreedyAction(other); // HA, HR, VA, etc.
 
-        oldActionNumber = stateSpace.getMove(myPos, other, oldAction.getIntValue());
+        oldActionNumber = stateSpace.getMove(myPos, other, oldAction.getIntValue(),false);
         myPos.adjustPosition(oldActionNumber);
 
     }

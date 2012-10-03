@@ -24,10 +24,13 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
     private StateRepresentation.Action currentAction;
     private ArrayList<ArrayList<ArrayList<Double>>> rewards;
     private double discountFactor;
+    boolean print;
     
     
     //Policy is impliciet vastgelegd in statespaceRepresentation
     public PredatorOnPolicyMonteCarlo(double tau, int nrRuns, double init, Position startPos, Position startPosPrey, double discount){
+        print = false;
+        
         this.nrRuns = nrRuns;
         discountFactor = discount;
         this.tau = tau;
@@ -76,7 +79,7 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         //bepaal actie, sla op en voer uit
         for(int i = 0;i<StateRepresentation.nrActions;i++){
             if(p<=probabilities[i]){
-                int a = representation.getMove(myPos, preyPos, i);
+                int a = representation.getMove(myPos, preyPos, i, print);
                 currentAction = representation.returnAction(i);
                 myPos.adjustPosition(a);
                 break;
@@ -201,6 +204,10 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         else{
             representation.printForOneAction(latex, action);
         }
+    }
+    
+    public void setPrint(boolean p){
+        print = p;
     }
     
 }

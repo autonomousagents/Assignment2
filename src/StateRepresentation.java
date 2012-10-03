@@ -297,7 +297,7 @@ public class StateRepresentation {
     }
     
   //Determines in which wind direction the prey is located
-    private Direction getDirection(Position predator, Position prey){
+    private Direction getDirection(Position predator, Position prey, boolean print){
         int horizontalDiff = 5 - prey.getX();
         for(int i = 0; i<Math.abs(horizontalDiff);i++){
             if (horizontalDiff < 0){
@@ -320,11 +320,12 @@ public class StateRepresentation {
                     predator.adjustPosition(2);
                 }
         }
-//        System.out.print("relative prey pos = ");
-//        prey.printPosition();
-//        System.out.print("relative pred pos = ");
-//        predator.printPosition();
-        
+        if(print){
+            System.out.print("relative prey pos = ");
+            prey.printPosition();
+            System.out.print("relative pred pos = ");
+            predator.printPosition();
+        }
     	if(prey.getX()>=predator.getX()){
     		if(prey.getY()>=predator.getY()){
     			if(predator.getX()>=predator.getY()){
@@ -369,11 +370,11 @@ public class StateRepresentation {
      * @param stateRepMove = action in state space
      * @return action in real world
      */
-    public int getMove(Position predator, Position prey, int stateRepMove) { 
+    public int getMove(Position predator, Position prey, int stateRepMove, boolean print) { 
                 if(stateRepMove == 4){
                     return 4;
                 }
-		int directionRel = getDirection(new Position(predator), new Position(prey)).getIndex();
+		int directionRel = getDirection(new Position(predator), new Position(prey), print).getIndex();
                 int ToBReturned=-1;
 		switch(directionRel){
 		case 5:
@@ -383,64 +384,64 @@ public class StateRepresentation {
 			case 1:ToBReturned = 3;break;
 			case 2:ToBReturned = 2; break;
 			case 3:ToBReturned = 0;break;
-			}
+			}break;
 		case 6:
 			switch(stateRepMove){
 			case 0:ToBReturned = 3;break;
 			case 1:ToBReturned = 1;break;
 			case 2:ToBReturned = 2;break;
 			case 3:ToBReturned = 0;break;
-			}
+			}break;
 		case 7:
 			switch(stateRepMove){
 			case 0:ToBReturned = 2;break;
 			case 1:ToBReturned = 0;break;
 			case 2:ToBReturned = 3;break;
 			case 3:ToBReturned = 1;break;
-			}
+			}break;
 		case 8:
 			switch(stateRepMove){
 			case 0:ToBReturned = 0;break;
 			case 1:ToBReturned = 2;break;
 			case 2:ToBReturned = 3;break;
 			case 3:ToBReturned = 1;break;
-			}
+			}break;
 		case 9:
 			switch(stateRepMove){
 			case 0:ToBReturned = 3;break;
 			case 1:ToBReturned = 1;break;
 			case 2:ToBReturned = 0;break;
 			case 3:ToBReturned = 2;break;
-			}
+			}break;
 		case 10:
 			switch(stateRepMove){
 			case 0:ToBReturned = 1;break;
 			case 1:ToBReturned = 3;break;
 			case 2:ToBReturned = 0;break;
 			case 3:ToBReturned = 2;break;
-			}
+			}break;
 		case 11:
 			switch(stateRepMove){
 			case 0:ToBReturned = 0;break;
 			case 1:ToBReturned = 2;break;
 			case 2:ToBReturned = 1;break;
 			case 3:ToBReturned = 3;break;
-			}
+			}break;
 		case 12:
 			switch(stateRepMove){
 			case 0:ToBReturned = 2;break;
 			case 1:ToBReturned = 0;break;
 			case 2:ToBReturned = 1;break;
 			case 3:ToBReturned = 3;break;
-			}
+			}break;
 		}
-//                if(print){
-//                    System.out.print("prey: ");
-//                    prey.printPosition();
-//                    System.out.print("predator: ");
-//                    predator.printPosition();
-//                    System.out.println("Direction = "+directionRel+" Action = "+returnAction(stateRepMove)+" Real action = "+ToBReturned+"\n");
-//                }
+                if(print){
+                    System.out.print("prey: ");
+                    prey.printPosition();
+                    System.out.print("predator: ");
+                    predator.printPosition();
+                    System.out.println("Direction = "+Direction.enumValues[directionRel]+" Action = "+returnAction(stateRepMove)+" Real action = "+ToBReturned+"\n");
+                }
 		return ToBReturned;
                 
 	}
