@@ -3,7 +3,9 @@
 \usepackage[margin=1in]{geometry}
 \usepackage[center]{caption}
 \usepackage{appendix}
+\usepackage{amsmath}
 \usepackage{graphicx}
+
 
 \newcommand{\HRule}{\rule{\linewidth}{0.1mm}}
 
@@ -56,10 +58,20 @@ This report will not be about our exact code and implementation details. However
 
 \section{Learning algorithms}
 \subsection{(M) Q-Learning}
+$\epsilon$-greedy: behaves greedily most of the time, but with probability $\epsilon$, instead select an action at random, uniformly, independently of the action-value estimates.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 28}\\ \\
+One step Q-learning:
+\\
+\begin{align*}
+Q(s_t,a_t) & \leftarrow Q(s_t,a_t) + \alpha \left[ r_{t+1} + \gamma \displaystyle\max_a Q(s_{t+1},a) - Q(s_t,a_t) \right]
+\end{align*}
+
 \subsection{(M) Experiment with $\epsilon$ and optimistic initialization}
-\subsection{(SC) Softmax action selection instead of $\epsilon$-greedy}
+\subsection{(SC) Softmax action selection instead of $\epsilon$-greedy}\label{sec:softmax}
+Softmax: the greedy action is still given the highest selection probability, but all the others are ranked and weighted according to their value estimates.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 30}
 \subsection{(SC) On-policy Monte Carlo Control}
+On-policy methods try to evaluate or improve the policy that is used to make decisions.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 122} The on-policy method we implemented uses softmax policies, which was previously explained in section \ref{sec:softmax}.
 \subsection{(SC) Off-Policy Monte Carlo Control}
+While the distinguishing feature of on-policy methods is that they estimate the value of a policy while using it for control, these two functions are separated in off-policy methods. The behavior policy, used to generate behavior, and the estimation policy, that is evaluated and improved, may in fact be unrelated. This separation is an advantage because the estimation policy may be deterministic (e.g., greedy), while the behavior policy can continue to sample all possible actions.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 126}
 \subsection{(SC) Sarsa}
 
 \section{Conclusion}
