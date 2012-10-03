@@ -17,17 +17,23 @@ public class PredatorQLearning implements Agent {
     private double currentReward;
     private int oldState;
     private int oldActionNumber;
+    
+    private double largestChange;
+    private double oldLargestChange;
+    private double maxChange;
 
     private int currentState;
     
     private int nrRuns, currentNrRuns;
 
-    public PredatorQLearning(double gamma, double alpha, double epsilon, Position startPos) {
+    public PredatorQLearning(double gamma, double alpha, double epsilon, double maxChange, Position startPos) {
         this.gamma = gamma;
         this.alpha = alpha;
         this.epsilon = epsilon;
         this.startPos = new Position(startPos);
         this.myPos = new Position(startPos);
+        this.largestChange = 0;
+        this.maxChange = maxChange;
         stateSpace = new StateRepresentation(initialValue);
 
         for (int i=0; i < StateRepresentation.nrActions; i++)
@@ -86,24 +92,26 @@ public class PredatorQLearning implements Agent {
         double maxActionValue = getBestActionValue(other);
 
      
-        double TDvalue = alpha * (currentReward + (gamma * (maxActionValue - oldQValue)));
-        double newQValue = oldQValue + TDvalue;
-
-
+        double TDvalue = alpha * (currentReward + (gamma * maxActionValue) - oldQValue);
+        double newQValue = oldQValue + TDvalue;      
         
         stateSpace.setValue(oldState, oldAction, newQValue);
 
       //  System.out.println("old state: " + oldState);
-        if (newQValue != 15)
-            System.out.println(//"(set pred pos " + stateSpace.linearIndexToPosition(oldState).getX() + ","+ stateSpace.linearIndexToPosition(oldState).getY() + ")" +
-                                "(Statenr: " + oldState + ") " +                              
-                              "set pred pos " + oldPos.getX() + ","+ oldPos.getY() +
-                                " and prey pos " + oldPreyPos.getX() + ","+ oldPreyPos.getY() +
-                                " and action " + oldAction +
-                                  " (oldAction nr.:" + oldActionNumber + ") " +
-                                  " to value " + newQValue +
-                                  "\nNew pos is: Predator: " + myPos.getX() + "," + myPos.getY() + " , Prey: " + other.getX() + "," + other.getY() +
-                                  " (new Statenr is " + currentState + ")");
+     //  if (newQValue != 15)
+//            System.out.println(//"(set pred pos " + stateSpace.linearIndexToPosition(oldState).getX() + ","+ stateSpace.linearIndexToPosition(oldState).getY() + ")" +
+//                                "(Statenr: " + oldState + ") " +                              
+//                              "set pred pos " + oldPos.getX() + ","+ oldPos.getY() +
+//                                " and prey pos " + oldPreyPos.getX() + ","+ oldPreyPos.getY() +
+//                                " and action " + oldAction +
+//                                  " (oldAction nr.:" + oldActionNumber + ") " +
+//                                  " to value " + newQValue +
+//                                  "\nNew pos is: Predator: " + myPos.getX() + "," + myPos.getY() + " , Prey: " + other.getX() + "," + other.getY() +
+//                                  " (new Statenr is " + currentState + ")");
+        
+        double change = Math.abs(newQValue - oldQValue);
+        if (change > largestChange)
+        	largestChange=change;
 
     }
 
@@ -170,13 +178,19 @@ public class PredatorQLearning implements Agent {
 
     @Override
     public void reset() {
+    	oldLargestChange=largestChange;
+    	largestChange=0;
         myPos = new Position(startPos);
+    }
+    
+    public void setMaxChange(double m) {
+    	maxChange= m;
     }
 
     @Override
     public boolean isConverged() {
         // TODO Auto-generated method stub
-        return false;
+        return oldLargestChange <= maxChange;
     }
 
     public void printQValues(boolean latex, int action) {
