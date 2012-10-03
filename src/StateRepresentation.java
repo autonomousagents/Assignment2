@@ -187,7 +187,7 @@ public class StateRepresentation {
     	for(int i = 0;i<stateRepHeight;i++){
     		for(int j = i+1;j<stateRepWidth;j++){
     			for(int k = 0;k<nrActions;k++)
-    			stateRep[i][j][k] =  Environment.maximumReward+1;
+    			stateRep[i][j][k] =  -1.0;
     		}
     	}
     }

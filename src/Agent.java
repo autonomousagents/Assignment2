@@ -12,5 +12,7 @@ public interface Agent {
 	public boolean isConverged();
 	
 	public void observeReward(double reward, Position other);
+        
+        public double [] policy (Position prey, Position predator);
 
 }

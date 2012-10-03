@@ -102,7 +102,6 @@ public class View {
             out.write("imagesc(C, [ min(min(C)), max(max(C)) ] );");
             out.write("colormap(gray);");
             out.write("axis image");
-            out.write("axis off ");
             out.flush();
             fstream.close();
             out.close();
@@ -110,5 +109,74 @@ public class View {
         catch (IOException e) {
             System.out.println("Error in writeVMatrix(): " + e);
         }
+    }
+    
+    /*
+     * " \\begin{table}[htbp]\n"+
+"\\caption{policy}\n"+
+"\\centering\n"+
+"\\begin{footnotesize}\n"+
+"\\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|}\n"+
+"&0&1&2&3&4&5&6&7&8&9&10\\\\ \\hline\\\\"
+
+"\\end{tabular}\n"+
+"\\end{footnotesize}\n"+
+"\\end{table}\n"
+     */
+    
+    public void printPolicy(Agent agent,int xPrey,int yPrey){
+        System.out.println(" \\begin{table}[htbp]\n"+
+                            "\\caption{policy}\n"+
+                            "\\label{policyLabel}\n"+
+                            "\\centering\n"+
+                            "\\begin{footnotesize}\n"+
+                            "\\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|}\n"+
+                            "&0&1&2&3&4&5&6&7&8&9&10\\\\ \\hline\\\\");
+        Position prey = new Position(xPrey,yPrey);
+        double [][] probabilities = new double [Environment.WIDTH][StateRepresentation.nrActions];
+        //For each y-coordinate
+        for(int row = 0; row <Environment.HEIGHT;row++){ 
+            //for each x-coordinate
+            for(int col = 0; col <Environment.WIDTH;col++){
+                //If it is not the goal state
+                if(xPrey != col || yPrey!=row){
+                    //Get the probabilities for real world actions
+                    double [] prob = agent.policy(prey, new Position(col,row));  
+                    for(int i = 0; i<StateRepresentation.nrActions;i++){
+                        probabilities[col][i]=prob[i];
+                    }
+                } 
+            }
+            String [] directions = {"U", "R", "D", "L","W"};
+            //Print probabilities for each action
+            for(int i = 0; i<StateRepresentation.nrActions;i++){
+                    if(i==0){
+                        System.out.print(row + "&");
+                    }
+                    else{
+                        System.out.print("&");
+                    }
+                    for(int col = 0; col<Environment.WIDTH;col++){
+                        if(xPrey != col || yPrey!=row){
+                            System.out.print(directions[i] + " " + String.format("%.3f",probabilities[col][i]));
+                            
+                        }
+                        else if(i == 2){
+                            System.out.print("Prey");
+                        }
+                        if(col == Environment.WIDTH-1){
+                            System.out.println("\\\\");
+                        }
+                        else{
+                            System.out.print("&");
+                        }
+                    }
+            }
+            System.out.println("\\hline \\\\");
+            
+        }
+        System.out.print("\\end{tabular}\n"+
+                        "\\end{footnotesize}\n"+
+                        "\\end{table}\n");
     }
 }
