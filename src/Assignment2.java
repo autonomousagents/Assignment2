@@ -62,7 +62,7 @@ public class Assignment2 {
     public void firstMust() {
 
 
-        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.001, new Position(0, 0)); //double gamma, double alpha, double epsilon, double maxChange, Position startPos
+        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.1, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0)); //double gamma, double alpha,  double maxChange, double a.s.Parameter, ActionSelection actionSelectionMethod, Position startPos
         Environment env = new Environment(agent, new Position(5, 5));
         View view = new View(env);
 
@@ -73,7 +73,7 @@ public class Assignment2 {
             episodes++;
         } while (! agent.isConverged());
         System.out.println(" Took "  +  episodes + "  episodes to converge." );
-//        // show last episode
+//        show last episode
 //        env.reset();
 //        view.print();
 //        while (!env.isEnded()) {
@@ -82,13 +82,35 @@ public class Assignment2 {
 //        }
         agent.printQValues(false, -1);
     }
+    
+    public void firstShould() {
+    	  PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.1, PredatorQLearning.ActionSelection.softmax, new Position(0, 0)); //double gamma, double alpha,  double maxChange, double a.s.Parameter, ActionSelection actionSelectionMethod, Position startPos
+          Environment env = new Environment(agent, new Position(5, 5));
+          View view = new View(env);
+
+          int nrEpisodes = 2000;
+          int episodes = 0;
+          do {
+              env.doRun();
+              episodes++;
+          } while (! agent.isConverged());
+          System.out.println(" Took "  +  episodes + "  episodes to converge." );
+//          show last episode
+//          env.reset();
+//          view.print();
+//          while (!env.isEnded()) {
+//              env.nextTimeStep();
+//              view.print();
+//          }
+          agent.printQValues(false, -1);
+    }
 
     public static void main(String[] args) {
         Assignment2 a = new Assignment2();
       // a.onPolicyMonteCarlo(0.8, 15, 15, 0.9);
         a.firstMust();
         // a.secondMust();
-        // a.firstShould();
+         a.firstShould();
         // a.secondShould();
         // a.thirdShould();
     }
