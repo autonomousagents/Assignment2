@@ -19,7 +19,7 @@ public class Assignment2 {
     public Assignment2() {
 
         bestStateRep = new StateRepresentation(-1);
-        readBestStateRep("Assignment2/src/qLearning_11_million_episodes.txt");
+        readBestStateRep("src/qLearning_200_million_episodes_eclipse.txt");
     }
 
   
@@ -41,13 +41,13 @@ public class Assignment2 {
                 String notAction = scanner.next();
                 while(!notAction.equals("Action")) {
                      notAction = scanner.next();
-                  //  System.out.println(notAction);
+                    //System.out.println(notAction);
                 }
                 scanner.nextLine(); // vb. " = Hor.Approach"
 
                 while(scanner.hasNextDouble()){
                    double stateActionValue = scanner.nextDouble();
-                  // System.out.println(stateActionValue + " at state " + stateNumber + " action " + actionNumber);
+                   //System.out.println(stateActionValue + " at state " + stateNumber + " action " + actionNumber);
 
                    bestStateRep.setValue(stateNumber, StateRepresentation.Action.actionValues[actionNumber], stateActionValue);
                    stateNumber++;
@@ -60,6 +60,7 @@ public class Assignment2 {
     	catch(FileNotFoundException e) {
     		System.out.println(" File "  + filename + " not found!");
     	}
+    	
 
     }
 
@@ -113,20 +114,32 @@ public class Assignment2 {
      */
     public double calculateRMSE(PredatorQLearning agent) {
 
+    	 double highestActionValue = Math.min(Environment.minimumReward, agent.getInitialValue());
+         double lowestActionValue = Math.max(Environment.maximumReward, agent.getInitialValue());
+         
         double RMSE=0;
         double numerator=0;
 
         for (int stateNr=0; stateNr < StateRepresentation.nrStates; stateNr++) {
             for(int actionNr=0; actionNr < StateRepresentation.nrActions; actionNr++) {
 
-                double difference = bestStateRep.getValue(stateNr, StateRepresentation.Action.actionValues[actionNr]) -
-                                    agent.getValueStateAction(stateNr, StateRepresentation.Action.actionValues[actionNr] ) ;
+            	double v1 = bestStateRep.getValue(stateNr, StateRepresentation.Action.actionValues[actionNr]) ;
+            	double v2 = agent.getValueStateAction(stateNr, StateRepresentation.Action.actionValues[actionNr] ) ;
+                double difference = v1 - v2;
 
                 numerator += Math.pow(difference, 2);
+                
+                if(v1 > highestActionValue ) highestActionValue=v1 ;
+                if(v2 > highestActionValue ) highestActionValue=v2 ;
+                if(v1 < lowestActionValue ) lowestActionValue=v1 ;
+                if(v2 < lowestActionValue ) lowestActionValue=v2 ;
+
+                
             }
         }
         RMSE = Math.sqrt( numerator / StateRepresentation.nrStateActionPairs);
-        return RMSE;
+        double NRMSE = RMSE / (highestActionValue - lowestActionValue);
+        return NRMSE;
     }
 
 
@@ -163,6 +176,8 @@ public class Assignment2 {
 
         return (nrOptimalAction /  StateRepresentation.nrStates) * 100;
     }
+     
+     
 
     /**
      * Q-Learning
@@ -173,24 +188,41 @@ public class Assignment2 {
     public void firstMust() {
 
                                     //double gamma, double alpha,  double maxChange, double a.s.Parameter, ActionSelection actionSelectionMethod, Position startPos
-        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.001, 0.5, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
+        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.1, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
         Environment env = new Environment(agent, new Position(5, 5));
         View view = new View(env);
 
-        int nrEpisodes = 200000000;
-        int episodes = 0;
-        do {
-            env.doRun();
-            episodes++;
-         //    if (episodes % 1000 == 0) {
-           //     System.out.println(String.format("%.5f",agent.getOldLargestChange()));
-         //   }
-          //  System.out.println("RMSE: " + calculateRMSE( agent ));
-          //  System.out.println("Percentage optimal (same) action: " + percentageOptimalAction(agent));
-        //} while (! agent.isConverged());
-        } while (episodes < nrEpisodes);
-        System.out.println(" Took "  +  episodes + "  episodes to converge." );
-        System.out.println(String.format("%.5f",agent.getOldLargestChange()));
+        int nrTestRuns=5;
+        int nrEpisodes = 1000;
+        
+        double RMSEvalues[] = new double[nrEpisodes];
+        double optimalActionValues[] = new double[nrEpisodes];
+        
+        Arrays.fill(RMSEvalues, 0);
+        Arrays.fill(optimalActionValues,0);
+        
+        double episilonArray[] = {0.1,0.5,0.7,0.9};
+        double alphaArray[] = {0.1,0.5,0.7,0.9};
+
+        
+        for (int i=0; i < nrTestRuns; i++) {
+	        int episode = 0;
+	        do {
+	            env.doRun();
+	            episode++;
+	         //    if (episodes % 1000 == 0) {
+	           //     System.out.println(String.format("%.5f",agent.getOldLargestChange()));
+	         //   }
+	            //System.out.println("RMSE: " + calculateRMSE( agent ));
+	           // System.out.println("Percentage optimal (same) action: " + percentageOptimalAction(agent));
+	            
+	            RMSEvalues[episode] += calculateRMSE( agent ) / nrTestRuns;
+	            optimalActionValues[episode] += percentageOptimalAction( agent ) / nrTestRuns;
+	        //} while (! agent.isConverged());
+	        } while (episode < nrEpisodes);
+	        System.out.println(" Took "  +  episode + "  episodes to converge." );
+        }
+        //System.out.println(String.format("%.5f",agent.getOldLargestChange()));
 //        show last episode
 //        env.reset();
 //        view.print();
