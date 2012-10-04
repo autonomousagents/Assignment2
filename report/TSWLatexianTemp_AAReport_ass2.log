@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.1.5)  4 OCT 2012 15:32
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.1.5)  4 OCT 2012 15:37
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000195.tex"
-(/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000195.tex
+**"/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_AAReport_ass2.tex"
+(/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_AAReport_ass2.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, nohyphenation, german-x-2009-06-19, ngerman-x-2009-06-19, ancientgreek, ibycus, arabic, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, galician, german, ngerman, monogreek, greek, hungarian, icelandic, indonesian, interlingua, irish, italian, kurmanji, latin, latvian, lithuanian, mongolian, mongolian2a, bokmal, nynorsk, polish, portuguese, romanian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, turkish, ukenglish, ukrainian, uppersorbian, welsh, loaded.
 (/usr/local/texlive/2009/texmf-dist/tex/latex/base/article.cls
@@ -150,8 +150,8 @@ File: pdftex.def 2009/08/25 v0.04m Graphics/color for pdfTeX
 \Gin@req@height=\dimen124
 \Gin@req@width=\dimen125
 )
-No file TSWLatexianTemp_000195.aux.
-\openout1 = `TSWLatexianTemp_000195.aux'.
+No file TSWLatexianTemp_AAReport_ass2.aux.
+\openout1 = `TSWLatexianTemp_AAReport_ass2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
 LaTeX Font Info:    ... okay on input line 13.
@@ -246,11 +246,11 @@ LaTeX Warning: Reference `app:classDiagram' on page 2 undefined on input line 64
 LaTeX Warning: Reference `plot:Qalphagamma' on page 3 undefined on input line 78.
 
 
-LaTeX Warning: Reference `sec:softmax' on page 3 undefined on input line 89.
+LaTeX Warning: Reference `sec:softmax' on page 3 undefined on input line 91.
 
 [3]
-No file TSWLatexianTemp_000195.bbl.
-[4] (./TSWLatexianTemp_000195.aux)
+No file TSWLatexianTemp_AAReport_ass2.bbl.
+[4] (./TSWLatexianTemp_AAReport_ass2.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -259,15 +259,15 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 3106 strings out of 493848
- 45342 string characters out of 3149208
+ 3105 strings out of 493848
+ 45378 string characters out of 3149208
  105971 words of memory out of 3000000
- 6376 multiletter control sequences out of 15000+200000
+ 6375 multiletter control sequences out of 15000+200000
  11619 words of font info for 41 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 36i,9n,38p,933b,283s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,9n,38p,940b,283s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on TSWLatexianTemp_000195.pdf (4 pages, 358260 bytes).
+Output written on TSWLatexianTemp_AAReport_ass2.pdf (4 pages, 358277 bytes).
 PDF statistics:
  103 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

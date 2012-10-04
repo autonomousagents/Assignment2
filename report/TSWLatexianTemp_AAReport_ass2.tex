@@ -78,12 +78,14 @@ For this assignment, we implemented Q-learning and used it for our predator agen
 Figure \ref{plot:Qalphagamma} shows plots on the performance of the agent over time for different $\alpha$ and for different $\gamma$ (discount factor).
 
 \begin{figure}
-\label{Qalphagamma}
+\label{plot:Qalphagamma}
 % plots hier!!!!
 \end{figure}
 
 \subsection{(M) Experiment with $\epsilon$ and optimistic initialization}
 \subsection{(SC) Softmax action selection instead of $\epsilon$-greedy}\label{sec:softmax}
+For this 
+
 Softmax: the greedy action is still given the highest selection probability, but all the others are ranked and weighted according to their value estimates.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 30}
 \subsection{(SC) On-policy Monte Carlo Control}
 On-policy methods try to evaluate or improve the policy that is used to make decisions.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 122} The on-policy method we implemented uses softmax policies, which was previously explained in section \ref{sec:softmax}.
