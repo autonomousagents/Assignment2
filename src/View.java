@@ -6,7 +6,6 @@
  *
  * @authors Group 7: Agnes van Belle, Maaike Fleuren, Norbert Heijne, Lydia Mennes
  */
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -44,20 +43,20 @@ public class View {
         world[env.getPredatorPos().getY()][env.getPredatorPos().getX()] = EMPTY;
         world[env.getPreyPos().getY()][env.getPreyPos().getX()] = EMPTY;
     }
-    
+
     /*
      * /prints the environment the way it is
      */
-    public void printSimple(){
-        for(int i =0;i<Environment.HEIGHT;i++){
-            for(int j = 0; j<Environment.WIDTH;j++){
-                if(env.getPreyPos().equals(new Position(j,i))){
+    public void printSimple() {
+        for (int i = 0; i < Environment.HEIGHT; i++) {
+            for (int j = 0; j < Environment.WIDTH; j++) {
+                if (env.getPreyPos().equals(new Position(j, i))) {
                     System.out.print(PREY);
                 }
-                else if(env.getPredatorPos().equals(new Position(j,i))){
+                else if (env.getPredatorPos().equals(new Position(j, i))) {
                     System.out.print(PREDATOR);
                 }
-                else{
+                else {
                     System.out.print(EMPTY);
                 }
                 System.out.print(" ");
@@ -112,61 +111,137 @@ public class View {
         }
     }
 
-
-    public void printPolicy(Agent agent,int xPrey,int yPrey){
-        System.out.println(" \\begin{table}[htbp]\n"+
-                            "\\caption{policy}\n"+
-                            "\\label{policyLabel}\n"+
-                            "\\centering\n"+
-                            "\\begin{footnotesize}\n"+
-                            "\\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|}\n"+
-                            "&0&1&2&3&4&5&6&7&8&9&10\\\\ \\hline\\\\");
-        Position prey = new Position(xPrey,yPrey);
-        double [][] probabilities = new double [Environment.WIDTH][StateRepresentation.nrActions];
+    public void printPolicy(Agent agent, int xPrey, int yPrey) {
+        System.out.println(" \\begin{table}[htbp]\n"
+                + "\\caption{policy}\n"
+                + "\\label{policyLabel}\n"
+                + "\\centering\n"
+                + "\\begin{footnotesize}\n"
+                + "\\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|}\n"
+                + "&0&1&2&3&4&5&6&7&8&9&10\\\\ \\hline\\\\");
+        Position prey = new Position(xPrey, yPrey);
+        double[][] probabilities = new double[Environment.WIDTH][StateRepresentation.nrActions];
         //For each y-coordinate
-        for(int row = 0; row <Environment.HEIGHT;row++){
+        for (int row = 0; row < Environment.HEIGHT; row++) {
             //for each x-coordinate
-           for(int col = 0; col <Environment.WIDTH;col++){
+            for (int col = 0; col < Environment.WIDTH; col++) {
                 //If it is not the goal state
-                if(xPrey != col || yPrey!=row){
+                if (xPrey != col || yPrey != row) {
                     //Get the probabilities for real world actions
-                    double [] prob = agent.policy(prey, new Position(col,row));
-                    for(int i = 0; i<StateRepresentation.nrActions;i++){
-                        probabilities[col][i]=prob[i];
+                    double[] prob = agent.policy(prey, new Position(col, row));
+                    for (int i = 0; i < StateRepresentation.nrActions; i++) {
+                        probabilities[col][i] = prob[i];
                     }
-             }
+                }
             }
-            String [] directions = {"U", "R", "D", "L","W"};
+            String[] directions = {"U", "R", "D", "L", "W"};
             //Print probabilities for each action
-            for(int i = 0; i<StateRepresentation.nrActions;i++){
-                    if(i==0){
-                        System.out.print(row + "&");
-                    }
-                    else{
-                       System.out.print("&");
-                    }
-                    for(int col = 0; col<Environment.WIDTH;col++){
-                        if(xPrey != col || yPrey!=row){
-                            System.out.print(directions[i] + " " + String.format("%.3f",probabilities[col][i]));
+            for (int i = 0; i < StateRepresentation.nrActions; i++) {
+                if (i == 0) {
+                    System.out.print(row + "&");
+                }
+                else {
+                    System.out.print("&");
+                }
+                for (int col = 0; col < Environment.WIDTH; col++) {
+                    if (xPrey != col || yPrey != row) {
+                        System.out.print(directions[i] + " " + String.format("%.3f", probabilities[col][i]));
 
-                        }
-                        else if(i == 2){
-                            System.out.print("Prey");
-                        }
-                        if(col == Environment.WIDTH-1){
-                            System.out.println("\\\\");
-                        }
-                        else{
-                            System.out.print("&");
-                        }
                     }
+                    else if (i == 2) {
+                        System.out.print("Prey");
+                    }
+                    if (col == Environment.WIDTH - 1) {
+                        System.out.println("\\\\");
+                    }
+                    else {
+                        System.out.print("&");
+                    }
+                }
             }
             System.out.println("\\hline \\\\");
 
         }
-        System.out.print("\\end{tabular}\n"+
-                        "\\end{footnotesize}\n"+
-                       "\\end{table}\n");
+        System.out.print("\\end{tabular}\n"
+                + "\\end{footnotesize}\n"
+                + "\\end{table}\n");
     }
 
+    /**
+     * rows: param values
+     * columns: episodes 
+     *
+     * @see Assignment2::firstMust()
+     */
+    public static void episodeMatrixToMatlabScript(String filename, double episodesMatrix[][], double paramValues[], String paramName, String yLabel, int yMinMaxValues[]) {
+        int nrEpisodes = episodesMatrix[0].length;
+        int nrParamValues = episodesMatrix.length;
+
+        try {
+            FileWriter fstream = new FileWriter(filename, false);
+            BufferedWriter out = new BufferedWriter(fstream);
+
+            out.write("clear;clc;");
+            out.newLine();
+            out.write("nrEpisodes = " + nrEpisodes + ";");
+            out.newLine();
+
+
+            for (int j=0; j < nrParamValues; j++) {
+                for (int i = 0; i < nrEpisodes; i++) {
+
+                    String number;
+                    number = String.format("%.4f", episodesMatrix[j][i]);
+
+                    out.write("E" + j + "(" + (i + 1) + ",1)=");
+                    out.write(number.replaceAll(",", "."));
+              
+                    out.write(";");
+                    out.newLine();
+                }
+                out.newLine();
+                out.flush();
+            }
+
+            out.write("figure('visible','on'); "
+                    + "xAxis = linspace(1,nrEpisodes,nrEpisodes);");
+
+            out.newLine();
+
+            StringBuilder plotText = new StringBuilder();
+            plotText.append("plot(");            
+            for (int j=0; j < nrParamValues; j++) {
+                if (j != 0 )
+                     plotText.append(",");
+                plotText.append("xAxis, E").append(j);
+            }
+            plotText.append(");");
+            
+            out.write(plotText.toString());
+            out.newLine();
+
+            out.write( "ylim([" + yMinMaxValues[0] + " " + yMinMaxValues[1] + "]);"
+                        + "xlabel('Episode');"
+                        + "ylabel('" + yLabel + "');");
+            out.newLine();
+
+            StringBuilder legend = new StringBuilder();
+            legend.append("legend(");
+            for (int j=0; j < nrParamValues; j++) {
+                if (j != 0 )
+                     legend.append(",");
+                legend.append("'" + paramName + " = " + paramValues[j] + "'");
+            }
+            legend.append(");");
+
+            out.write(legend.toString());
+
+            out.flush();
+            fstream.close();
+            out.close();
+        }
+        catch (IOException e) {
+            System.out.println("Error in episodeMatrixToMatlabScript(..): " + e);
+        }
+    }
 }
