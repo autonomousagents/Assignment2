@@ -67,12 +67,20 @@ This report will not be about our exact code and implementation details. However
 As mentioned before, we will use the same environment as in the previous assignment. But in this assignment, we will assume the learning scenerio: the agent does not know the transition probabilities, nor the reward structure. On a very high level there are two ways to come to a good solution in this setting: learning the model, and do planning again (model based learning), or not learn the model, and directly try to learn a high-reward policy (model-free learning). In this assignment we will focus on the latter.\footnote{Roijers (2012) \textit{Assignments Autonomous Agents} p. 6}
 
 \subsection{(M) Q-Learning}
-$\epsilon$-greedy: behaves greedily most of the time, but with probability $\epsilon$, instead select an action at random, uniformly, independently of the action-value estimates.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 28}\\ \\
-One step Q-learning\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 148}:
-\\
+Q-Learning is an off-policy Temporal-Difference control algorithm.
+While the distinguishing feature of on-policy methods is that they estimate the value of a policy while using it for control, these two functions are separated in off-policy methods. The behavior policy, used to generate behavior, and the estimation policy, that is evaluated and improved, may in fact be unrelated. This separation is an advantage because the estimation policy may be deterministic (e.g., greedy), while the behavior policy can continue to sample all possible actions.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 126} Its simplest form, \textit{one-step Q-learning}, is defined by\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 148}:
 \begin{align*}
 Q(s_t,a_t) & \leftarrow Q(s_t,a_t) + \alpha \left[ r_{t+1} + \gamma \displaystyle\max_a Q(s_{t+1},a) - Q(s_t,a_t) \right]
 \end{align*}
+
+For this assignment, we implemented Q-learning and used it for our predator agent. We used $\epsilon$-greedy action selection, which behaves greedily most of the time, but with probability $\epsilon$, instead select an action at random, uniformly, independently of the action-value estimates.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 28} In this case, we used $\epsilon = 0.1$. We initiated the values of our Q-learning table optimistically with a value of 15 for all cells in the table.
+
+Figure \ref{plot:Qalphagamma} shows plots on the performance of the agent over time for different $\alpha$ and for different $\gamma$ (discount factor).
+
+\begin{figure}
+\label{Qalphagamma}
+% plots hier!!!!
+\end{figure}
 
 \subsection{(M) Experiment with $\epsilon$ and optimistic initialization}
 \subsection{(SC) Softmax action selection instead of $\epsilon$-greedy}\label{sec:softmax}
@@ -80,7 +88,7 @@ Softmax: the greedy action is still given the highest selection probability, but
 \subsection{(SC) On-policy Monte Carlo Control}
 On-policy methods try to evaluate or improve the policy that is used to make decisions.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 122} The on-policy method we implemented uses softmax policies, which was previously explained in section \ref{sec:softmax}.
 \subsection{(SC) Off-Policy Monte Carlo Control}
-While the distinguishing feature of on-policy methods is that they estimate the value of a policy while using it for control, these two functions are separated in off-policy methods. The behavior policy, used to generate behavior, and the estimation policy, that is evaluated and improved, may in fact be unrelated. This separation is an advantage because the estimation policy may be deterministic (e.g., greedy), while the behavior policy can continue to sample all possible actions.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 126}
+
 \subsection{(SC) Sarsa}
 
 \section{Conclusion}
