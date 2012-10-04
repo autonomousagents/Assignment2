@@ -2,6 +2,7 @@
 
 \usepackage[margin=1in]{geometry}
 \usepackage[center]{caption}
+\usepackage{subfigure}
 \usepackage{appendix}
 \usepackage{amsmath}
 \usepackage{graphicx}
@@ -44,12 +45,18 @@ By using this symmetry in the default state space a much smaller state space was
 Each state represents a distance between the prey and predator. These are represented in the lower left diagonal of a matrix, in which the $x$-axis is the relative horizontal distance in the MDP and the $y$-axis the relative vertical distance in the MDP. This matrix is shown in Figure \ref{fig:NewStateRep}. Combinations of positions of prey and predator for which the horizontal and vertical distances are equal are now treated equivalent. 
 Also two combinations for which the horizontal distance in one equals the vertical distance in the other and vice versa are considered equal. In order to navigate through this state space different actions are required. These are: \textit{horizontal retreat, horizontal approach, vertical retreat, vertical approach}, as illustrated in Figure \ref{fig:statespaceSymm}, and of course the action \textit{wait}. When interacting with the environment these actions are converted into corresponding actions in the real world. This only requires the relative direction of the prey (which is always located at the centre, regardless of its coordinates) with respect to the predator. This is computed by using the difference in location of the prey and predator on the $x$- and $y$-axis.
 
-\begin{figure}[htbp]
-        \center{\includegraphics[width=0.8\textwidth]{statespaceSymm.png}}
-        \caption{\label{fig:statespaceSymm}The $11 \times 11$ grid divided into eight symmetric pieces, with the corresponding possible moves which are also symmetric.}
-
-        \center{\includegraphics[width=0.7\textwidth]{VMatrixNewStateRep.png}}
-        \caption{\label{fig:NewStateRep} Colormap of $V$-values, the brighter the color the higher the corresponding $V$-value. The prey is always located on the (1, 1) coordinate in this state representation.}
+\begin{figure}[ht]
+\centering
+\subfigure[The $11 \times 11$ grid divided into eight symmetric pieces, with the corresponding possible moves which are also symmetric.]{
+    \includegraphics[width=0.5\textwidth]{statespaceSymm.png}
+    \label{fig:statespaceSymm}
+}
+\subfigure[Colormap of $V$-values, the brighter the color the higher the corresponding $V$-value. The prey is always located on the (1, 1) coordinate in this state representation.]{
+    \includegraphics[width=0.4\textwidth]{VMatrixNewStateRep.png}
+    \label{fig:NewStateRep}
+}
+\caption{Illustration of the symmetry and corresponding values of the new state space representation}
+\label{fig:statespaceIll}
 \end{figure}
 
 
@@ -57,6 +64,8 @@ Also two combinations for which the horizontal distance in one equals the vertic
 This report will not be about our exact code and implementation details. However, a class diagram of our code is provided in Appendix \ref{app:classDiagram}.
 
 \section{Learning algorithms}
+As mentioned before, we will use the same environment as in the previous assignment. But in this assignment, we will assume the learning scenerio: the agent does not know the transition probabilities, nor the reward structure. On a very high level there are two ways to come to a good solution in this setting: learning the model, and do planning again (model based learning), or not learn the model, and directly try to learn a high-reward policy (model-free learning). In this assignment we will focus on the latter.\footnote{Roijers (2012) \textit{Assignments Autonomous Agents} p. 6}
+
 \subsection{(M) Q-Learning}
 $\epsilon$-greedy: behaves greedily most of the time, but with probability $\epsilon$, instead select an action at random, uniformly, independently of the action-value estimates.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 28}\\ \\
 One step Q-learning\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 148}:
