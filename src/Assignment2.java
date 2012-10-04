@@ -129,6 +129,7 @@ public class Assignment2 {
         return RMSE;
     }
 
+
      public double percentageOptimalAction(PredatorQLearning agent) {
 
         double nrOptimalAction=0;
@@ -171,23 +172,25 @@ public class Assignment2 {
      */
     public void firstMust() {
 
-    	//double gamma, double alpha,  double maxChange, double a.s.Parameter, ActionSelection actionSelectionMethod, Position startPos
-        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.05, 0.01, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
+                                    //double gamma, double alpha,  double maxChange, double a.s.Parameter, ActionSelection actionSelectionMethod, Position startPos
+        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.001, 0.5, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
         Environment env = new Environment(agent, new Position(5, 5));
         View view = new View(env);
 
-      //  int nrEpisodes = 2000;
+        int nrEpisodes = 200000000;
         int episodes = 0;
         do {
             env.doRun();
             episodes++;
-            // if (episodes % 100 == 0) {
-             //   System.out.println(String.format("%.5f",agent.getOldLargestChange()));
-           // }
-            System.out.println("RMSE: " + calculateRMSE( agent ));
-            System.out.println("Percentage optimal (same) action: " + percentageOptimalAction(agent));
-        } while (! agent.isConverged());
+         //    if (episodes % 1000 == 0) {
+           //     System.out.println(String.format("%.5f",agent.getOldLargestChange()));
+         //   }
+          //  System.out.println("RMSE: " + calculateRMSE( agent ));
+          //  System.out.println("Percentage optimal (same) action: " + percentageOptimalAction(agent));
+        //} while (! agent.isConverged());
+        } while (episodes < nrEpisodes);
         System.out.println(" Took "  +  episodes + "  episodes to converge." );
+        System.out.println(String.format("%.5f",agent.getOldLargestChange()));
 //        show last episode
 //        env.reset();
 //        view.print();
