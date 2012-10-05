@@ -213,7 +213,7 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
                 QValuesEstimation.setValue(current.getState(), current.getAction(), value);
             }
         }        
-        SARcombis = new ArrayList<>();
+        SARcombis = new ArrayList<SARcombi>();
         currentNrRuns++;
     }
     
@@ -304,7 +304,7 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
      * Reset list of state-action-reward triples
      */
     public void resetSAR(){
-        SARcombis=new ArrayList<>();
+        SARcombis=new ArrayList<SARcombi>();
     }
 
     

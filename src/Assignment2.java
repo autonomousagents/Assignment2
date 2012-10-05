@@ -161,7 +161,7 @@ public class Assignment2 {
                 }
                 else {
                     nrSteps = 0;
-                    System.out.println("invalid run" + invalidRun);
+                    //System.out.println("invalid run" + invalidRun);
                     invalidRun++;
                     agent.resetSAR();
                     env.resetNrSteps();

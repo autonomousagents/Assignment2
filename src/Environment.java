@@ -96,7 +96,7 @@ public class Environment {
                 }
                 else{
                     nrSteps = 0;
-                    System.out.println("invalid run" +invalidRun);
+                  //  System.out.println("invalid run" +invalidRun);
                     invalidRun++;
                     break;
                 }
