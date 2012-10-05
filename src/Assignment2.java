@@ -99,15 +99,19 @@ public class Assignment2 {
     }
 
     /**
-     * Process results of episodes of off-policy Monte Carlo, using the Softmax activation function.
+     * Process results of episodes of off-policy Monte Carlo for the estimation policy
+     *
+     * @see MonteCarloOffline(..)
      *
      * @param tau               : tau parameter of the softmax activation function
-     * @param nrRuns            : number of runs for each episode (will be averaged over)
+     * @param nrRuns            : number of episodes
      * @param init              : initial values for the Q(s,a) table
-     * @param QvaluesBehavior   :
-     * @return
+     * @param discount          : discount factor
+     * @param QvaluesBehavior   : estimation policy
+     *
+     * @return  steps per run needed to reach the goal, for the number of runs needed until convergence
      */
-    public ArrayList<Integer> ProcessEpisodesMonteCarloOffline(double tau, int nrRuns, double init, double discount, StateRepresentation QvaluesBehavior) {
+    public ArrayList<Integer> processEstimationPolicyMonteCarloOffline(double tau, int nrRuns, double init, double discount, StateRepresentation QvaluesBehavior) {
         PredatorOffPolicyMonteCarlo agentOffLineMC = new PredatorOffPolicyMonteCarlo(tau, nrRuns, init, new Position(0, 0), new Position(5, 5), discount);
         agentOffLineMC.setBehaviorPolicy(true, QvaluesBehavior);
         Environment env = new Environment(agentOffLineMC, new Position(5, 5));
@@ -147,14 +151,17 @@ public class Assignment2 {
     }
 
     /**
+     *
+     * SECOND SHOULD #2
+     *
      *  Off-policy Monte Carlo, using the Softmax activation function.
      *
-     * @param tau
-     * @param nrRuns
-     * @param init
-     * @param discount
-     * @param nrTrials
-     * @param nrRunsBehavior
+     * @param tau               : tau parameter of the softmax activation function
+     * @param nrRuns            : number of episodes for estimation policy
+     * @param init              : initial values for the Q(s,a) table
+     * @param discount          : discount factor
+     * @param nrTrials          : number of trials (will be averaged over)
+     * @param nrRunsBehavior    : number of episodes for behaviour policy
      */
     public void MonteCarloOffline(double tau, int nrRuns, double init, double discount, int nrTrials, int nrRunsBehavior){
         PredatorOnPolicyMonteCarlo agentOnLineMC = new PredatorOnPolicyMonteCarlo(tau, nrRunsBehavior, init, new Position(0, 0), new Position(5, 5), discount);
@@ -169,7 +176,7 @@ public class Assignment2 {
         ArrayList<ArrayList<Integer>> stepsPerRun = new ArrayList<ArrayList<Integer>>();
         for(int i = 0; i<nrTrials;i++){
             System.out.println("Trial: " + i);
-            stepsPerRun.add(ProcessEpisodesMonteCarloOffline(tau, nrRuns, init, discount, QvaluesBehavior));
+            stepsPerRun.add(processEstimationPolicyMonteCarloOffline(tau, nrRuns, init, discount, QvaluesBehavior));
         }
         int[] average = new int [nrRuns];
         System.out.print("\n[");
@@ -563,7 +570,8 @@ public class Assignment2 {
         // a.QLearningCompareEpsilonsAndInits(); // Second Must
         //a.QLearningCompareActionselections(); // First Should
 
-        // a.onPolicyMonteCarlo(0.8, 15, 15, 0.9); // Second Should # 1
+     //    a.MonteCarloOnline(5, 0.8,500,15.0,0.8);
+       // a.MonteCarloOffline(0.8, 400, 15.0, 0.9, 4,600);
 
     }
 }
