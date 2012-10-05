@@ -53,18 +53,17 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
     
     @Override
     public void doMove(Position other) {
-        //pick action based on greedy action krijgt grootste kans en rest verdelen 
-        //with respect to Q (softmax of epsilon greedy)
+        //Pick action using softmax
         
-        //vraag action values op
+        //Receive action values from state space representation
         double[] values = representation.getStateActionPairValues(state);
-        //bereken kansen
-        //calculate total
+        //Calculate probabilities
+        //Calculate total
         double total =0.0;
         for(int i = 0; i< StateRepresentation.nrActions;i++){
             total += Math.exp(values[i]/tau);
         }
-        //calculate probability per action
+        //Calculate probability per action
         double[] probabilities = new double [StateRepresentation.nrActions];
         for(int i = 0; i< StateRepresentation.nrActions;i++){
             probabilities[i] = Math.exp(values[i]/tau)/total;
@@ -74,9 +73,9 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
             probabilities[i] = probabilities[i]+probabilities[i-1];
         }
         probabilities[StateRepresentation.nrActions-1] = 1.0;
-        //trek waarde
+        //Draw value
         double p = Math.random();
-        //bepaal actie, sla op en voer uit
+        //Determine action, save action and return action
         for(int i = 0;i<StateRepresentation.nrActions;i++){
             if(p<=probabilities[i]){
                 int a = representation.getMove(myPos, preyPos, i, print);
@@ -99,10 +98,7 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
 
     @Override
     public boolean isConverged() {
-        if(currentNrRuns<nrRuns){
-            return false;
-        }
-        return true;
+        return nrRuns<currentNrRuns;
     }
 
     @Override
@@ -208,6 +204,10 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
     
     public void setPrint(boolean p){
         print = p;
+    }
+    
+    public StateRepresentation getQvalues(){
+        return representation;
     }
 
    @Override
