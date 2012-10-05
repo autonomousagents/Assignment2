@@ -246,4 +246,79 @@ public class View {
             System.out.println("Error in episodeMatrixToMatlabScript(..): " + e);
         }
     }
+    
+    
+    public static void episodeMatrixToMatlabScript2D(String filename, double episodesMatrix[][], double paramValues[][], String paramName1, String paramName2, String yLabel, int yMinMaxValues[]) {
+        int nrEpisodes = episodesMatrix[0].length;
+        int nrParamValues = episodesMatrix.length;
+
+        try {
+            FileWriter fstream = new FileWriter(filename, false);
+            BufferedWriter out = new BufferedWriter(fstream);
+
+            out.write("clear;clc;");
+            out.newLine();
+            out.write("nrEpisodes = " + nrEpisodes + ";");
+            out.newLine();
+
+
+            for (int j=0; j < nrParamValues; j++) {
+                for (int i = 0; i < nrEpisodes; i++) {
+
+                    String number;
+                    number = String.format("%.4f", episodesMatrix[j][i]);
+
+                    out.write("E" + j + "(" + (i + 1) + ",1)=");
+                    out.write(number.replaceAll(",", "."));
+              
+                    out.write(";");
+                    out.newLine();
+                }
+                out.newLine();
+                out.flush();
+            }
+
+            out.write("figure('visible','on'); "
+                    + "xAxis = linspace(1,nrEpisodes,nrEpisodes);");
+
+            out.newLine();
+
+            StringBuilder plotText = new StringBuilder();
+            plotText.append("plot(");            
+            for (int j=0; j < nrParamValues; j++) {
+                if (j != 0 )
+                     plotText.append(",");
+                plotText.append("xAxis, E").append(j);
+            }
+            plotText.append(", 'LineWidth',1.5");
+            plotText.append(");");
+            
+            out.write(plotText.toString());
+            out.newLine();
+
+//            out.write( "ylim([" + yMinMaxValues[0] + " " + yMinMaxValues[1] + "]);"
+            out.write("title('Agent performance');"
+                        + "xlabel('Episode');"
+                        + "ylabel('" + yLabel + "');");
+            out.newLine();
+
+            StringBuilder legend = new StringBuilder();
+            legend.append("legend(");
+            for (int j=0; j < nrParamValues; j++) {
+                if (j != 0 )
+                     legend.append(",");
+                legend.append("'" + paramName1 + "=" + paramValues[j][0] + ", " + paramName2 + "=" + paramValues[j][1] + "'");
+            }
+            legend.append(");");
+
+            out.write(legend.toString());
+
+            out.flush();
+            fstream.close();
+            out.close();
+        }
+        catch (IOException e) {
+            System.out.println("Error in episodeMatrixToMatlabScript(..): " + e);
+        }
+    }
 }

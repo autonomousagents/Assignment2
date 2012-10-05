@@ -22,7 +22,7 @@ public class Assignment2 {
     public Assignment2() {
 
         bestStateRep = new StateRepresentation(-1);
-        readBestStateRep("Assignment2/src/qLearning_200_million_episodes.txt");
+        readBestStateRep("src/qLearning_200_million_episodes_eclipse.txt");
     }
 
     /**
@@ -303,17 +303,61 @@ public class Assignment2 {
     }
 
     public void secondMust() {
-        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.1, PredatorQLearning.ActionSelection.softmax, new Position(0, 0)); //double gamma, double alpha,  double maxChange, double a.s.Parameter, ActionSelection actionSelectionMethod, Position startPos
-        Environment env = new Environment(agent, new Position(5, 5));
+    	
+    	 PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.1, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
+         Environment env = new Environment(agent, new Position(5, 5));
+
+         int nrTestRuns = 100;
+         int nrEpisodes = 1000;
+    	
+
+        //double epsilonValues[] = new double[]{0.1, 0.9};
+       // double initValues[] = new double[]{0, 15};
+        
+        double initEpsilonValues[][]= new double[][]{{0,0.1},{0,0.9},{15,0.1},{15,0.9}};
+        
+        double optimalActionValues[][] = new double[initEpsilonValues.length][nrEpisodes];
+        double percentageStateActionPairsVisited[][] = new double[initEpsilonValues.length][nrEpisodes];
+        int nrStepsUsed[][] = new int[initEpsilonValues.length][nrEpisodes];
+                                       
+        for (double[] row : optimalActionValues)
+            Arrays.fill(row, 0.0);
+
+        	
+	        for (int j = 0; j < initEpsilonValues.length; j++) {
+	            for (int i = 0; i < nrTestRuns; i++) {
+	
+	                agent = new PredatorQLearning(0.9, 0.5, 0.1, initEpsilonValues[j][1], PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
+	                env = new Environment(agent, new Position(5, 5));
+	                agent.setInitialValue(initEpsilonValues[j][0]);
+	                
+	                int episode = 0;
+	                do {
+	                    env.doRun();
+	
+	                    percentageStateActionPairsVisited[j][episode] += agent.getPercentageStateActionPairsVisited() / nrTestRuns;
+	                    optimalActionValues[j][episode] += percentageOptimalAction(agent) / nrTestRuns;
+	                    nrStepsUsed[j][episode] += agent.getNrStepsUsed() / nrTestRuns;
+	                    
+	                    episode++;
+	
+	                } while (episode < nrEpisodes);
+	            }
+	        }
+	        View.episodeMatrixToMatlabScript2D("qLearning_epsilon.m", optimalActionValues, initEpsilonValues, "init.val.", "epsilon", "% Optimal Action", new int[]{0, 100});
+	        View.episodeMatrixToMatlabScript2D("qLearning_visitedPairs.m", optimalActionValues, initEpsilonValues, "init.val." , "epsilon", "% State-Action pairs visited", new int[]{0, 100});
+	        View.episodeMatrixToMatlabScript2D("qLearning_nrSteps.m", optimalActionValues, initEpsilonValues, "init.val.", "epsilon", "Number of steps", new int[]{0, 100});
+
+        }
 
 
-    }
+    
 
     public static void main(String[] args) {
         Assignment2 a = new Assignment2();
         // a.onPolicyMonteCarlo(0.8, 15, 15, 0.9);
-        a.firstMust();
-        // a.secondMust();
+     //   a.firstMust();
+         a.secondMust();
         //  a.firstShould();
         // a.secondShould();
         // a.thirdShould();
