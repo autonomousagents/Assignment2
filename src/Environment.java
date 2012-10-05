@@ -17,11 +17,13 @@ public class Environment {
     public static final double maximumReward = 10;
     public static final double minimumReward = 0;
     public static final double normalReward = 0;
+    int nrSteps;
 
     public Environment(Agent predator, Position preyStart) {
         this.isEnded = false;
         this.predator = predator;
         prey = new Prey(preyStart);
+        nrSteps = 0;
     }
 
     public void nextTimeStep() {
@@ -29,6 +31,7 @@ public class Environment {
         prey.doMove(getPredatorPos());
         predator.observeReward(reward(prey.getPos(), predator.getPos()), prey.getPos());
         checkForEnd();
+        nrSteps++;
     }
 
     public boolean isEnded() {
@@ -70,10 +73,35 @@ public class Environment {
         predatorType = nr;
     }
     
+    public int getNrSteps(){
+        return nrSteps;
+    }
+    
+    public void resetNrSteps(){
+        nrSteps = 0;
+    }
+    
     public void doRun(){
-        while(!isEnded){
-            nextTimeStep();            
+        boolean validRun = false;
+        int invalidRun = 0;
+        while(!validRun){
+            while(!isEnded){
+                if(nrSteps<80000){
+                    nextTimeStep();  
+                    nrSteps++;
+                    if(isEnded){
+                        validRun = true;
+                    }
+                }
+                else{
+                    nrSteps = 0;                    
+                    System.out.println("invalid run" +invalidRun);
+                    invalidRun++;
+                    break;
+                }
+            }
+            reset();
         }
-        reset();
+        
     }
 }

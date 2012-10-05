@@ -166,7 +166,7 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
                 QValuesEstimation.setValue(current.getState(), current.getAction(), value);
             }
         }        
-        SARcombis = new ArrayList<SARcombi>();
+        SARcombis = new ArrayList<>();
         currentNrRuns++;
     }
     
@@ -189,7 +189,14 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         }
         double [] values = QValuesEstimation.getStateActionPairValues(linearIndex);
         prob[highestValueAction(values)]=1.0;
-        return prob;
+              
+        
+        double[]probabilitiesRealWorld = new double [StateRepresentation.nrActions];
+        for(int i = 0; i< StateRepresentation.nrActions;i++){
+            int realWorldAction = QValuesEstimation.getMove(predator, prey, i, false);
+            probabilitiesRealWorld[realWorldAction] = prob[i];
+        }
+       return probabilitiesRealWorld;
     }
     
     
@@ -209,12 +216,16 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
 
     @Override
     public void reset() {
-        myPos = new Position(startPos);
+        myPos = new Position(startPos);        
     }
 
     @Override
     public boolean isConverged() {
         return nrRuns < currentNrRuns;
+    }
+    
+    public void resetSAR(){
+        SARcombis=new ArrayList<>();
     }
 
     private int lastUnequalAction() {
@@ -229,6 +240,14 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
             }
         }
         return 0;
+    }
+    
+    public StateRepresentation getQValuesBehavior(){
+        return QValuesBehavior;
+    }
+    
+    public StateRepresentation getQValuesEst(){
+        return QValuesEstimation;
     }
     
     private class SARcombi{
