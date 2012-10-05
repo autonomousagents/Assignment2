@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -10,8 +11,6 @@ import java.util.Scanner;
  *
  * @authors Group 7: Agnes van Belle, Maaike Fleuren, Norbert Heijne, Lydia Mennes
  */
-
-
 public class Assignment2 {
 
     private StateRepresentation bestStateRep;
@@ -64,47 +63,60 @@ public class Assignment2 {
         }
     }
 
-
-    /**
+    /**     
      * SECOND SHOULD #1
      *
      * On-policy Monte Carlo, using the Softmax activation function.
      *
+     * @param nrTrials  : number of episodes
+     * @param tau       : tau parameter of the softmax activation function
+     * @param nrRuns    : number of runs for each episode (will be averaged over)
+     * @param init      : initial values for the Q(s,a) table
+     * @param discount  : discount factor
      */
-    private void startOnLineMonteCarlo(int nrTrials,double tau, int nrRuns, double init, double discount) {
+    private void MonteCarloOnline(int nrTrials, double tau, int nrRuns, double init, double discount) {
         ArrayList<ArrayList<Integer>> stepsPerRun = new ArrayList<ArrayList<Integer>>();
-        for(int i = 0; i<nrTrials;i++){
-            stepsPerRun.add(onPolicyMonteCarlo(tau,  nrRuns,  init,  discount));
+        for (int i = 0; i < nrTrials; i++) {
+            stepsPerRun.add(onPolicyMonteCarlo(tau, nrRuns, init, discount));
             System.out.println("Trial: " + i);
         }
-        int[] average = new int [nrRuns];
+        int[] average = new int[nrRuns];
         System.out.print("\n[");
-        for(int i = 0; i<nrRuns;i++){
+        for (int i = 0; i < nrRuns; i++) {
             int total = 0;
-            for(int j =0;j<nrTrials;j++){
-                total+=stepsPerRun.get(j).get(i);
+            for (int j = 0; j < nrTrials; j++) {
+                total += stepsPerRun.get(j).get(i);
             }
-            average[i] = total/nrTrials;
-            if(i==nrRuns-1){
+            average[i] = total / nrTrials;
+            if (i == nrRuns - 1) {
                 System.out.print(average[i]);
             }
-            else{
-                System.out.print(average[i]+",");
+            else {
+                System.out.print(average[i] + ",");
             }
         }
         System.out.println("]");
     }
 
-    public ArrayList<Integer> offLineMonteCarlo(double tau, int nrRuns, double init, double discount, StateRepresentation QvaluesBehavior){
+    /**
+     * Process results of episodes of off-policy Monte Carlo, using the Softmax activation function.
+     *
+     * @param tau               : tau parameter of the softmax activation function
+     * @param nrRuns            : number of runs for each episode (will be averaged over)
+     * @param init              : initial values for the Q(s,a) table
+     * @param QvaluesBehavior   :
+     * @return
+     */
+    public ArrayList<Integer> ProcessEpisodesMonteCarloOffline(double tau, int nrRuns, double init, double discount, StateRepresentation QvaluesBehavior) {
         PredatorOffPolicyMonteCarlo agentOffLineMC = new PredatorOffPolicyMonteCarlo(tau, nrRuns, init, new Position(0, 0), new Position(5, 5), discount);
         agentOffLineMC.setBehaviorPolicy(true, QvaluesBehavior);
-        Environment env = new Environment(agentOffLineMC, new Position(5,5));
+        Environment env = new Environment(agentOffLineMC, new Position(5, 5));
         View v = new View(env);
         ArrayList<Integer> stepsPerRun = new ArrayList<Integer>();
         int runView = 10;
         int runNr = 0;
         do {
-            doRunMain(env,agentOffLineMC,v, false);
+            doRunMain(env, agentOffLineMC, v, false);
             runNr++;
             if (runNr % runView == 0) {
                 System.out.println(runNr);
@@ -115,7 +127,7 @@ public class Assignment2 {
             env.resetNrSteps();
 
             agentOffLineMC.useBehaviorPolicy(false);
-            doRunMain(env,agentOffLineMC,v, false);
+            doRunMain(env, agentOffLineMC, v, false);
             stepsPerRun.add(env.getNrSteps());
             env.reset();
             env.resetNrSteps();
@@ -134,26 +146,70 @@ public class Assignment2 {
         return stepsPerRun;
     }
 
-    public void doRunMain(Environment env, PredatorOffPolicyMonteCarlo agent, View v, boolean print){
+    /**
+     *  Off-policy Monte Carlo, using the Softmax activation function.
+     *
+     * @param tau
+     * @param nrRuns
+     * @param init
+     * @param discount
+     * @param nrTrials
+     * @param nrRunsBehavior
+     */
+    public void MonteCarloOffline(double tau, int nrRuns, double init, double discount, int nrTrials, int nrRunsBehavior){
+        PredatorOnPolicyMonteCarlo agentOnLineMC = new PredatorOnPolicyMonteCarlo(tau, nrRunsBehavior, init, new Position(0, 0), new Position(5, 5), discount);
+        Environment env = new Environment(agentOnLineMC, new Position(5,5));
+
+        do {
+            env.doRun();
+            agentOnLineMC.learnAfterEpisode();
+            env.reset();
+        } while (!agentOnLineMC.isConverged());
+        StateRepresentation QvaluesBehavior = agentOnLineMC.getQvalues();
+        ArrayList<ArrayList<Integer>> stepsPerRun = new ArrayList<ArrayList<Integer>>();
+        for(int i = 0; i<nrTrials;i++){
+            System.out.println("Trial: " + i);
+            stepsPerRun.add(ProcessEpisodesMonteCarloOffline(tau, nrRuns, init, discount, QvaluesBehavior));
+        }
+        int[] average = new int [nrRuns];
+        System.out.print("\n[");
+        for(int i = 0; i<nrRuns;i++){
+            int total = 0;
+            for(int j =0;j<nrTrials;j++){
+                total+=stepsPerRun.get(j).get(i);
+            }
+            average[i] = total/nrTrials;
+            if(i==nrRuns-1){
+                System.out.print(average[i]);
+            }
+            else{
+                System.out.print(average[i]+",");
+            }
+        }
+        System.out.println("]");
+
+    }
+
+    public void doRunMain(Environment env, PredatorOffPolicyMonteCarlo agent, View v, boolean print) {
         boolean validRun = false;
         int invalidRun = 0;
         int nrSteps = 0;
-        while(!validRun){
-            while(!env.isEnded()){
-                if(nrSteps<80000){
+        while (!validRun) {
+            while (!env.isEnded()) {
+                if (nrSteps < 80000) {
                     env.nextTimeStep();
-                    if(print){
+                    if (print) {
                         v.printSimple();
                     }
-                    nrSteps ++;
                     nrSteps++;
-                    if(env.isEnded()){
+                    nrSteps++;
+                    if (env.isEnded()) {
                         validRun = true;
                     }
                 }
-                else{
+                else {
                     nrSteps = 0;
-                    System.out.println("invalid run" +invalidRun);
+                    System.out.println("invalid run" + invalidRun);
                     invalidRun++;
                     agent.resetSAR();
                     env.resetNrSteps();
@@ -162,12 +218,10 @@ public class Assignment2 {
                 }
             }
             env.reset();
-    }
+        }
     }
 
-
-    
-   public ArrayList<Integer> onPolicyMonteCarlo(double tau, int nrRuns, double init, double discount) {
+    public ArrayList<Integer> onPolicyMonteCarlo(double tau, int nrRuns, double init, double discount) {
         //double tau, int nrRuns, double init, Position startPos, Position startPosPrey
         ArrayList<Integer> stepsPerRun = new ArrayList<Integer>();
         PredatorOnPolicyMonteCarlo agent = new PredatorOnPolicyMonteCarlo(tau, nrRuns, init, new Position(0, 0), new Position(5, 5), discount);
@@ -195,7 +249,6 @@ public class Assignment2 {
 //        view.printPolicy(agent, 5, 5);
         return stepsPerRun;
     }
-
 
     /**
      * Makes matlab scripts that plot statistics for Q-Learning using a given action selection method with
@@ -246,7 +299,6 @@ public class Assignment2 {
         View.episodeMatrixToMatlabScript("firstShould_nrSteps_" + valueName + ".m", nrStepsUsed, values, valueName, "Number of steps");
     }
 
-
     /**
      * FIRST SHOULD
      *
@@ -262,7 +314,6 @@ public class Assignment2 {
         QLearningMakeActionselectionPlots(epsilonGreedy, new double[]{0.01, 0.1, 0.5, 1});
         QLearningMakeActionselectionPlots(softmax, new double[]{0.1, 0.5, 1, 10});
     }
-
 
     /**
      * Calculate the normalized root mean square error (NRMSE),
@@ -290,17 +341,21 @@ public class Assignment2 {
 
                 numerator += Math.pow(difference, 2);
 
-                if (v1 > highestActionValue)
+                if (v1 > highestActionValue) {
                     highestActionValue = v1;
+                }
 
-                if (v2 > highestActionValue)
+                if (v2 > highestActionValue) {
                     highestActionValue = v2;
+                }
 
-                if (v1 < lowestActionValue)
+                if (v1 < lowestActionValue) {
                     lowestActionValue = v1;
+                }
 
-                if (v2 < lowestActionValue)
+                if (v2 < lowestActionValue) {
                     lowestActionValue = v2;
+                }
 
             }
         }
@@ -308,7 +363,6 @@ public class Assignment2 {
         double NRMSE = RMSE / (highestActionValue - lowestActionValue);
         return NRMSE;
     }
-
 
     /**
      * Calculate the percentage of time that a PredatorQLearning agent will take an
@@ -346,12 +400,12 @@ public class Assignment2 {
                     bestActionNr2 = actionNr;
                 }
             }
-            if (bestActionNr1 == bestActionNr2)
+            if (bestActionNr1 == bestActionNr2) {
                 nrOptimalAction++;
+            }
         }
         return (nrOptimalAction / StateRepresentation.nrStates) * 100;
     }
-
 
     /**
      * Makes matlab scripts that plot statistics for Q-Learning for different settings
@@ -426,7 +480,6 @@ public class Assignment2 {
         View.episodeMatrixToMatlabScript("qLearning_Alpha_POA.m", optimalActionValues, alphaValues, "alpha", "% Optimal Action");
     }
 
-
     /**
      * FIRST MUST
      *
@@ -450,7 +503,6 @@ public class Assignment2 {
 
 
     }
-
 
     /**
      * SECOND MUST
@@ -504,16 +556,14 @@ public class Assignment2 {
         View.episodeMatrixToMatlabScript2D("qLearning_nrSteps.m", nrStepsUsed, initEpsilonValues, "init.val.", "epsilon", "Number of steps");
     }
 
-
-
-
     public static void main(String[] args) {
         Assignment2 a = new Assignment2();
 
-       //   a.QLearningCompareAlphasAndDfs(); // First Must
+        //   a.QLearningCompareAlphasAndDfs(); // First Must
         // a.QLearningCompareEpsilonsAndInits(); // Second Must
         //a.QLearningCompareActionselections(); // First Should
-         // a.onPolicyMonteCarlo(0.8, 15, 15, 0.9); // Second Should # 1
+
+        // a.onPolicyMonteCarlo(0.8, 15, 15, 0.9); // Second Should # 1
 
     }
 }
