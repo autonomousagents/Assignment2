@@ -192,11 +192,7 @@ public class Assignment2 {
         double NRMSEvalues[][] = new double[DFvalues.length][nrEpisodes];
         double optimalActionValues[][] = new double[DFvalues.length][nrEpisodes];
 
-        for (double[] row : NRMSEvalues)
-            Arrays.fill(row, 0.0);
-        for (double[] row : optimalActionValues)
-            Arrays.fill(row, 0.0);
-        
+       
         for (int j = 0; j < DFvalues.length; j++) {
             for (int i = 0; i < nrTestRuns; i++) {
 
@@ -226,11 +222,6 @@ public class Assignment2 {
         double NRMSEvalues[][] = new double[alphaValues.length][nrEpisodes];
         double optimalActionValues[][] = new double[alphaValues.length][nrEpisodes];
 
-        for (double[] row : NRMSEvalues)
-            Arrays.fill(row, 0.0);
-        for (double[] row : optimalActionValues)
-            Arrays.fill(row, 0.0);
-
         for (int j = 0; j < alphaValues.length; j++) {
             for (int i = 0; i < nrTestRuns; i++) {
 
@@ -251,6 +242,8 @@ public class Assignment2 {
         View.episodeMatrixToMatlabScript("qLearning_Alpha_POA.m", optimalActionValues, alphaValues, "alpha", "% Optimal Action", new int[]{0, 100});
 
         //agent.printQValues(false, -1);
+        
+       
     }
 
 
@@ -274,33 +267,7 @@ public class Assignment2 {
         
     }
 
-    public void firstShould() {
-        PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.1, PredatorQLearning.ActionSelection.softmax, new Position(0, 0)); //double gamma, double alpha,  double maxChange, double a.s.Parameter, ActionSelection actionSelectionMethod, Position startPos
-        Environment env = new Environment(agent, new Position(5, 5));
-        View view = new View(env);
-
-        //  int nrEpisodes = 2000;
-        int episodes = 0;
-        int episodeAllStatesVisited = -1;
-        do {
-            env.doRun();
-            episodes++;
-            if (episodeAllStatesVisited == -1 && agent.allStatesVisited()) {
-                episodeAllStatesVisited = episodes;
-            }
-        } while (!agent.isConverged());
-        System.out.println(" Took " + episodes + "  episodes to converge.");
-//          show last episode
-//          env.reset();
-//          view.print();
-//          while (!env.isEnded()) {
-//              env.nextTimeStep();
-//              view.print();
-//          }
-        //input: tau
-
-        agent.printQValues(false, -1);
-    }
+    
 
     public void secondMust() {
     	
@@ -320,9 +287,6 @@ public class Assignment2 {
         double percentageStateActionPairsVisited[][] = new double[initEpsilonValues.length][nrEpisodes];
         double nrStepsUsed[][] = new double[initEpsilonValues.length][nrEpisodes];
                                        
-        for (double[] row : optimalActionValues)
-            Arrays.fill(row, 0.0);
-
         	
 	        for (int j = 0; j < initEpsilonValues.length; j++) {
 	            for (int i = 0; i < nrTestRuns; i++) {
@@ -351,6 +315,67 @@ public class Assignment2 {
 
         }
 
+    
+    public void firstShouldGraphs(boolean epsilonGreedy) {
+    	PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.1, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
+        Environment env = new Environment(agent, new Position(5, 5));
+        int nrTestRuns = 100;
+        int nrEpisodes = 1000;
+   	
+
+       double values[] = new double[]{ 0.01, 0.1, 0.5, 1 ,10};
+       
+       
+       double optimalActionValues[][] = new double[values.length][nrEpisodes];
+       double percentageStateActionPairsVisited[][] = new double[values.length][nrEpisodes];
+       double nrStepsUsed[][] = new double[values.length][nrEpisodes];
+                                      
+	        for (int j = 0; j < values.length; j++) {
+	            for (int i = 0; i < nrTestRuns; i++) {
+	
+	                agent = epsilonGreedy ? new PredatorQLearning(0.9, 0.5, 0.1, values[j], PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0)) :
+	                						new PredatorQLearning(0.9, 0.5, 0.1, values[j], PredatorQLearning.ActionSelection.softmax, new Position(0, 0));
+	                
+	                env = new Environment(agent, new Position(5, 5));
+	                
+	                int episode = 0;
+	                do {
+	                    env.doRun();
+	
+	                    percentageStateActionPairsVisited[j][episode] += agent.getPercentageStateActionPairsVisited() / nrTestRuns;
+	                    optimalActionValues[j][episode] += percentageOptimalAction(agent) / nrTestRuns;
+	                    nrStepsUsed[j][episode] += ((double)agent.getNrStepsUsed()) / nrTestRuns;
+	                    
+	                   // System.out.println(agent.getNrStepsUsed());
+	                    episode++;
+	
+	                } while (episode < nrEpisodes);
+	            }
+	        }
+	        
+	        String valueName = epsilonGreedy ? "epsilon" : "tau";
+	        View.episodeMatrixToMatlabScript("firstShould_optimalValues_"+valueName+".m", optimalActionValues, values, valueName, "% Optimal Action", new int[]{0, 100});
+	        View.episodeMatrixToMatlabScript("firstShould_visitedPairs_"+valueName+".m", percentageStateActionPairsVisited, values, valueName, "% State-Action pairs visited", new int[]{0, 100});
+	        View.episodeMatrixToMatlabScript("firstShould_nrSteps_"+valueName+".m", nrStepsUsed, values, valueName, "Number of steps", new int[]{0, 100});
+
+	        View view = new View(env);
+
+//	        while (!env.isEnded()) {
+//	            env.nextTimeStep();
+//	            view.printSimple();
+//	        }
+//	        
+//	        agent.printQValues(false, -1);
+       }
+    
+    public void firstShould() {
+    	boolean epsilonGreedy =  true;
+    	boolean softmax = !epsilonGreedy;
+    	
+    	firstShouldGraphs(epsilonGreedy);
+    	firstShouldGraphs(softmax);
+    }
+
 
     
 
@@ -358,8 +383,8 @@ public class Assignment2 {
         Assignment2 a = new Assignment2();
         // a.onPolicyMonteCarlo(0.8, 15, 15, 0.9);
      //   a.firstMust();
-         a.secondMust();
-        //  a.firstShould();
+      //   a.secondMust();
+          a.firstShould();
         // a.secondShould();
         // a.thirdShould();
     }

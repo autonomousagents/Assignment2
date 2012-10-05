@@ -216,8 +216,8 @@ public class PredatorQLearning implements Agent {
         
         stateSpace.setValue(oldState, oldAction, newQValue);
 
-      //  System.out.println("old state: " + oldState);
-     //  if (newQValue != 15)
+       // System.out.println("old state: " + oldState);
+//       if (newQValue != 15)
 //            System.out.println(//"(set pred pos " + stateSpace.linearIndexToPosition(oldState).getX() + ","+ stateSpace.linearIndexToPosition(oldState).getY() + ")" +
 //                                "(Statenr: " + oldState + ") " +                              
 //                              "set pred pos " + oldPos.getX() + ","+ oldPos.getY() +
@@ -227,10 +227,12 @@ public class PredatorQLearning implements Agent {
 //                                  " to value " + newQValue +
 //                                  "\nNew pos is: Predator: " + myPos.getX() + "," + myPos.getY() + " , Prey: " + other.getX() + "," + other.getY() +
 //                                  " (new Statenr is " + currentState + ")");
-        
+//        
         double change = Math.abs(newQValue - oldQValue);
         if (change > largestChange)
         	largestChange=change;
+        
+       // System.out.println("nrStateActionPairsVisited " + nrStateActionPairsVisited);
         
         StateActionPair saP = new StateActionPair(oldState, oldAction.getIntValue());
         if (!allStateActionPairsVisited && !stateActionPairsVisited.contains(saP)){ 
@@ -248,8 +250,8 @@ public class PredatorQLearning implements Agent {
     
     public StateRepresentation.Action pickAction(Position other) {
     	switch (actionSelectionMethod) {
-    		case epsilonGreedy : return pickEpsilonGreedyAction(other);
-    		case softmax : return pickSoftmaxAction(other);
+    		case epsilonGreedy :  return pickEpsilonGreedyAction(other);
+    		case softmax :   return pickSoftmaxAction(other);
     		default: return null;
     	}
     }
@@ -258,6 +260,11 @@ public class PredatorQLearning implements Agent {
     	
     	int[] reldistance = stateSpace.getRelDistance(myPos, other);
         int state = StateRepresentation.relDistanceToLinearIndex(reldistance[0], reldistance[1]);
+        
+     // remember oldState
+        oldPos = new Position(myPos);
+        oldPreyPos=other;
+        oldState = state;
         
         //vraag action values op
         double[] values = stateSpace.getStateActionPairValues(state);
@@ -271,7 +278,9 @@ public class PredatorQLearning implements Agent {
         double[] probabilities = new double [StateRepresentation.nrActions];
         for(int i = 0; i< StateRepresentation.nrActions;i++){
             probabilities[i] = Math.exp(values[i]/actionSelectionParameter)/total;
+        //    System.out.println("probability action " + StateRepresentation.Action.actionValues[i] + " =  " + probabilities[i]);
         }
+        
         //Make probabilities cumulative
         for(int i = 1; i< StateRepresentation.nrActions-1;i++){
             probabilities[i] = probabilities[i]+probabilities[i-1];
@@ -279,12 +288,17 @@ public class PredatorQLearning implements Agent {
         probabilities[StateRepresentation.nrActions-1] = 1.0;
         //trek waarde
         double p = Math.random();
+      //  System.out.println("p: " + p);
+        
         //bepaal actie, sla op en voer uit
         for(int i = 0;i<StateRepresentation.nrActions;i++){
             if(p<=probabilities[i]){
+            	
+            	//System.out.println("Actie: " + StateRepresentation.Action.actionValues[i]);
                 return StateRepresentation.Action.actionValues[i];
             }
         }
+        //System.out.println("nooit p <= probabilities[i]");
     	
     	return null;
     }
@@ -341,8 +355,9 @@ public class PredatorQLearning implements Agent {
         oldAction = pickAction(other); // HA, HR, VA, etc.
 
         oldActionNumber = stateSpace.getMove(myPos, other, oldAction.getIntValue(),false);
-        myPos.adjustPosition(oldActionNumber);
         
+        
+        myPos.adjustPosition(oldActionNumber);
         nrStepsUsed++;
 
     }
