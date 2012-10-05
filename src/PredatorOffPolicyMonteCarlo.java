@@ -26,6 +26,15 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
     boolean print;
     boolean useBehaviorPolicy, softMax;
     
+    /**
+     * Initializes all values
+     * @param tau parameter for softmax
+     * @param nrRuns how many episodes the agent will learn
+     * @param init At which value the Q-values are initialized
+     * @param startPos Starting position of agent
+     * @param startPosPrey Starting position of prey
+     * @param discount Discount factor for learning
+     */
     public PredatorOffPolicyMonteCarlo (double tau, int nrRuns, double init, Position startPos, Position startPosPrey, double discount){
         print = false;
         useBehaviorPolicy = true;
@@ -53,6 +62,10 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         }
     }
 
+    /**
+     * Executes an action based on the behavior policy or estimation policy
+     * @param other Position of the prey
+     */
     @Override
     public void doMove(Position other) {
         if(useBehaviorPolicy){
@@ -63,6 +76,10 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         }
     }
     
+    /**
+     * Executes action based on the behavior policy using softmax
+     * @param other 
+     */
     private void doMoveBehaviorPolicy(Position other) {
          //Pick action using softmax algorithm on Q-values of behavior policy
         
@@ -89,6 +106,11 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         }
     }
     
+    /**
+     * Generates the probabilities for each action according to softmax
+     * @param values Q-values for each action
+     * @return probabilities for each action
+     */
     private double [] softMaxProbabilities(double[] values){
         //Calculate probability per action
             
@@ -105,6 +127,10 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         return probabilities;
     }
 
+    /**
+     * Executes action according to greedy estimation policy
+     * @param other position of the prey
+     */
     private void doMoveEstimationPolicy(Position other) {
         //Take greedy action based on Q values of Determination Policy
         
@@ -118,6 +144,11 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         myPos.adjustPosition(action);
     }
     
+    /**
+     * returns the index of the action with the highest Q-value
+     * @param values Q values
+     * @return index of action with the highest Q-value
+     */    
     private int highestValueAction(double[] values){
         double highestValue = -1.0;
         int highestValueAction = -1;
@@ -130,6 +161,12 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         return highestValueAction;
     }
 
+    /**
+     * Observes reward and incorporates it in the list of state-action-reward triples
+     * and updates state
+     * @param reward received reward
+     * @param prey  position of prey to determine new state
+     */
     @Override
     public void observeReward(double reward, Position prey) {
         int [] reldis = QValuesBehavior.getRelDistance(myPos, prey);
@@ -137,7 +174,10 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         SARcombis.add(new SARcombi(state, currentAction, reward));   
         state = QValuesBehavior.relDistanceToLinearIndex(reldis[0], reldis[1]);
     }
-    
+    /**
+     * Fills state action pairs with initial values
+     * @param stateActionPairs 
+     */
     private void fill(int[][] stateActionPairs) {
         for(int i = 0; i<stateActionPairs.length;i++){
             stateActionPairs[i][0]=-1;
@@ -145,16 +185,22 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         }
     }
     
+    /**
+     * actual learning after episode
+     */
     public void learnAfterEpisode(){
         int timeStep = lastUnequalAction();
         int [][] stateActionPairs = new int [SARcombis.size()][2];
         fill(stateActionPairs);
+        //For each state-action-reward triple
         for(int i = timeStep; i<SARcombis.size();i++){
             if(!contains(stateActionPairs, SARcombis.get(i))){
                 SARcombi current = SARcombis.get(i);
                 double w = 1.0;
                 double R = current.getReward();
+                //For each remaining state-action-reward triple
                 for(int j = i+1; j<SARcombis.size();j++){
+                    //incorporate weight and reward
                     double [] prob = softMaxProbabilities(QValuesBehavior.getStateActionPairValues(SARcombis.get(j).getState()));
                     w = w * prob[SARcombis.get(j).getAction().getIntValue()];
                     R = R + SARcombis.get(j).getReward();
@@ -162,14 +208,21 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
                 double value = numerator.getValue(current.getState(), current.getAction())+w*R;
                 numerator.setValue(current.getState(), current.getAction(), value);
                 denominator.setValue(current.getState(), current.getAction(),w);
+                //Update Q value
                 value = numerator.getValue(current.getState(),current.getAction())/denominator.getValue(current.getState(),current.getAction());
                 QValuesEstimation.setValue(current.getState(), current.getAction(), value);
             }
         }        
-        SARcombis = new ArrayList<SARcombi>();
+        SARcombis = new ArrayList<>();
         currentNrRuns++;
     }
     
+    /**
+     * determines if a state action pair is already present in list
+     * @param stateActionPairs
+     * @param sar
+     * @return 
+     */
     private boolean contains(int[][] stateActionPairs, SARcombi sar) {
         for(int i = 0; i<stateActionPairs.length;i++){
                 if(sar.getAction().getIntValue()==stateActionPairs[i][1] && sar.getState()==stateActionPairs[i][0] ){
@@ -179,6 +232,12 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         return false;
     }
 
+    /**
+     * returns probability distribution over actions given the position of the prey and predator
+     * @param prey position of prey
+     * @param predator position of predator
+     * @return probability distribution
+     */
     @Override
     public double[] policy(Position prey, Position predator) {
         int[] reldis=QValuesEstimation.getRelDistance(predator, prey);
@@ -199,35 +258,60 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
        return probabilitiesRealWorld;
     }
     
-    
+    /**
+     * Boolean can be set on which policy is used when a move is requested
+     * @param value whether or not behavior policy should be used
+     */
     public void useBehaviorPolicy(boolean value){
         useBehaviorPolicy = value;
     }
     
+    /**
+     * Provides Q values for behavior policy
+     * @param type type of policy
+     * @param Qvalues actual Q-values of policy
+     */
     public void setBehaviorPolicy(boolean type, StateRepresentation Qvalues){
         softMax = type;
         QValuesBehavior = Qvalues;        
     }
     
+    /**
+     * Returns position of agent
+     */
     @Override
     public Position getPos() {
         return myPos;
     }
 
+    /**
+     * resets agent
+     */
     @Override
     public void reset() {
         myPos = new Position(startPos);        
     }
 
+    /**     * 
+     * @return Whether or not the number of runs to learn have been done
+     */
     @Override
     public boolean isConverged() {
         return nrRuns < currentNrRuns;
     }
     
+    /**
+     * Reset list of state-action-reward triples
+     */
     public void resetSAR(){
-        SARcombis=new ArrayList<SARcombi>();
+        SARcombis=new ArrayList<>();
     }
 
+    
+    /**
+     * returns index of last moment where behavior policy and estimation policy would have taken a different action
+     * @return index
+     */
     private int lastUnequalAction() {
         for(int i = 0; i<SARcombis.size();i++){
             SARcombi sar = SARcombis.get(i);
@@ -242,10 +326,16 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
         return 0;
     }
     
+    /**
+     * returns Q values of behavior policy
+     */
     public StateRepresentation getQValuesBehavior(){
         return QValuesBehavior;
     }
     
+    /*
+     * Returns Q values of the estimation policy
+     */
     public StateRepresentation getQValuesEst(){
         return QValuesEstimation;
     }

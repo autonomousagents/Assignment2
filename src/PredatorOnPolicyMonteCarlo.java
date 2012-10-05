@@ -27,7 +27,15 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
     boolean print;
     
     
-    //Policy is impliciet vastgelegd in statespaceRepresentation
+    /**
+     * Initializes all values
+     * @param tau for softmax
+     * @param nrRuns that the agent will learn
+     * @param init initial value for Q values
+     * @param startPos Starting position of agent
+     * @param startPosPrey starting position of prey
+     * @param discount discount factor for learning
+     */
     public PredatorOnPolicyMonteCarlo(double tau, int nrRuns, double init, Position startPos, Position startPosPrey, double discount){
         print = false;
         
@@ -51,6 +59,10 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         }
     }
     
+    /**
+     * Execute action according to softmax policy based on q values
+     * @param other position of prey
+     */
     @Override
     public void doMove(Position other) {
         //Pick action using softmax
@@ -86,21 +98,35 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         }
     }
 
+    /**
+     * @return position of agent
+     */
     @Override
     public Position getPos() {
         return myPos;
     }
 
+    /**
+     * resets agent
+     */
     @Override
     public void reset() {
         myPos = new Position(startPos);
     }
 
+    /**
+     * @return whether or not the number of runs for learning have been done
+     */
     @Override
     public boolean isConverged() {
         return nrRuns<currentNrRuns;
     }
 
+    /**
+     * incorporate observed reward and update state
+     * @param reward observed reward
+     * @param prey position prey
+     */
     @Override
     public void observeReward(double reward, Position prey) {
         int [] reldis = representation.getRelDistance(myPos, prey);
@@ -109,6 +135,12 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         state = representation.relDistanceToLinearIndex(reldis[0], reldis[1]);
     }
 
+    /**
+     * Whether or not a state action pair is already present in list
+     * @param stateActionPairs list
+     * @param sar pair
+     * @return present
+     */
     private boolean contains(int[][] stateActionPairs, SARcombi sar) {
         for(int i = 0; i<stateActionPairs.length;i++){
                 if(sar.getAction().getIntValue()==stateActionPairs[i][1] && sar.getState()==stateActionPairs[i][0] ){
@@ -143,6 +175,9 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         }
     }
     
+    /**
+     * Learning after the episode
+     */
     public void learnAfterEpisode(){
         int [][] stateActionPairs = new int [SARcombis.size()][2]; 
         fill(stateActionPairs);
@@ -186,6 +221,10 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         currentNrRuns++;
     }
     
+    /**
+     * Initialize list of state action pair
+     * @param stateActionPairs to be initialized
+     */
     private void fill(int[][] stateActionPairs) {
         for(int i = 0; i<stateActionPairs.length;i++){
             stateActionPairs[i][0]=-1;
@@ -193,6 +232,9 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         }
     }
     
+    /**
+     * prints Q values
+     */
     public void printQValues(boolean latex, int action){
         if(action==-1){
         representation.printAll(latex);
@@ -202,14 +244,26 @@ public class PredatorOnPolicyMonteCarlo implements Agent{
         }
     }
     
+    /**
+     * @param p determines whether or not the Q-values are printed
+     */
     public void setPrint(boolean p){
         print = p;
     }
     
+    /**
+     * returns Q-values
+     */
     public StateRepresentation getQvalues(){
         return representation;
     }
 
+    /**
+     * provides probability distribution over actions given a state
+     * @param prey position of the prey
+     * @param predator position of the predator
+     * @return 
+     */
    @Override
     public double[] policy(Position prey, Position predator) {
        String[] actionNamesStateRep= StateRepresentation.Action.actionNames;
