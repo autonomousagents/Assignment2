@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * Master AI UvA 2012/2013
  * Autonomous Agents
- * Assignment 1
+ * Assignment 2
  *
  * @authors Group 7: Agnes van Belle, Maaike Fleuren, Norbert Heijne, Lydia Mennes
  */
