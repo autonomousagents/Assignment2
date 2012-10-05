@@ -582,10 +582,10 @@ public class Assignment2 {
         Assignment2 a = new Assignment2();
 
         //   a.QLearningCompareAlphasAndDfs(); // First Must
-        // a.QLearningCompareEpsilonsAndInits(); // Second Must
+         a.QLearningCompareEpsilonsAndInits(); // Second Must
         //a.QLearningCompareActionselections(); // First Should
 
-        //    a.MonteCarloOnline(5, 0.8,500,15.0,0.8);
+        //  a.MonteCarloOnline(5, 0.8,500,15.0,0.8);
         // a.MonteCarloOffline(0.8, 400, 15.0, 0.9, 4,600);
 
     }
