@@ -19,6 +19,9 @@ public class PredatorQLearning implements Agent {
     private int oldState;
     private int oldActionNumber;
     
+    private int nrStepsUsed;
+    private int nrStepsUsedOld;
+    
     private double largestChange;
     private double oldLargestChange;
     private double maxChange;
@@ -106,6 +109,8 @@ public class PredatorQLearning implements Agent {
         stateSpace = new StateRepresentation(initialValue);
         nrStateActionPairsVisited=0;
         allStateActionPairsVisited=false;
+        nrStepsUsed=0;
+        nrStepsUsedOld=0;
         
         stateActionPairsVisited = new ArrayList<StateActionPair>();
         
@@ -114,8 +119,14 @@ public class PredatorQLearning implements Agent {
 
     }
     
+    public double getPercentageStateActionPairsVisited() {
+    	return 100 *
+    		(nrStateActionPairsVisited / (StateRepresentation.nrStateActionPairs - StateRepresentation.nrAbsorbingStateActionPairs));
+    }
+    
     public void setInitialValue(double iV) {
     	initialValue=iV;
+    	stateSpace = new StateRepresentation(initialValue);
     }
     
     public double getInitialValue() {
@@ -143,6 +154,10 @@ public class PredatorQLearning implements Agent {
     public double[] getStateActionPairValues(int linearIndex){
 
         return stateSpace.getStateActionPairValues(linearIndex);
+    }
+    
+    public int getNrStepsUsed() {
+    	return nrStepsUsedOld;
     }
 
     /**
@@ -223,7 +238,7 @@ public class PredatorQLearning implements Agent {
         	nrStateActionPairsVisited++;
         }
         if(!allStateActionPairsVisited){
-        	allStateActionPairsVisited = (nrStateActionPairsVisited == (StateRepresentation.nrStateActionPairs - StateRepresentation.nrActions));
+        	allStateActionPairsVisited = (nrStateActionPairsVisited == (StateRepresentation.nrStateActionPairs - StateRepresentation.nrAbsorbingStateActionPairs));
         }
     }
     
@@ -327,6 +342,8 @@ public class PredatorQLearning implements Agent {
 
         oldActionNumber = stateSpace.getMove(myPos, other, oldAction.getIntValue(),false);
         myPos.adjustPosition(oldActionNumber);
+        
+        nrStepsUsed++;
 
     }
 
@@ -340,6 +357,8 @@ public class PredatorQLearning implements Agent {
     	oldLargestChange=largestChange;
     	largestChange=0;
         myPos = new Position(startPos);
+        nrStepsUsedOld= nrStepsUsed;
+        nrStepsUsed=0;
 
     }
     

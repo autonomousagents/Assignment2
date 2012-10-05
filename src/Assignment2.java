@@ -318,7 +318,7 @@ public class Assignment2 {
         
         double optimalActionValues[][] = new double[initEpsilonValues.length][nrEpisodes];
         double percentageStateActionPairsVisited[][] = new double[initEpsilonValues.length][nrEpisodes];
-        int nrStepsUsed[][] = new int[initEpsilonValues.length][nrEpisodes];
+        double nrStepsUsed[][] = new double[initEpsilonValues.length][nrEpisodes];
                                        
         for (double[] row : optimalActionValues)
             Arrays.fill(row, 0.0);
@@ -337,16 +337,17 @@ public class Assignment2 {
 	
 	                    percentageStateActionPairsVisited[j][episode] += agent.getPercentageStateActionPairsVisited() / nrTestRuns;
 	                    optimalActionValues[j][episode] += percentageOptimalAction(agent) / nrTestRuns;
-	                    nrStepsUsed[j][episode] += agent.getNrStepsUsed() / nrTestRuns;
+	                    nrStepsUsed[j][episode] += ((double)agent.getNrStepsUsed()) / nrTestRuns;
 	                    
+	                   // System.out.println(agent.getNrStepsUsed());
 	                    episode++;
 	
 	                } while (episode < nrEpisodes);
 	            }
 	        }
-	        View.episodeMatrixToMatlabScript2D("qLearning_epsilon.m", optimalActionValues, initEpsilonValues, "init.val.", "epsilon", "% Optimal Action", new int[]{0, 100});
-	        View.episodeMatrixToMatlabScript2D("qLearning_visitedPairs.m", optimalActionValues, initEpsilonValues, "init.val." , "epsilon", "% State-Action pairs visited", new int[]{0, 100});
-	        View.episodeMatrixToMatlabScript2D("qLearning_nrSteps.m", optimalActionValues, initEpsilonValues, "init.val.", "epsilon", "Number of steps", new int[]{0, 100});
+	        View.episodeMatrixToMatlabScript2D("qLearning_optimalValues.m", optimalActionValues, initEpsilonValues, "init.val.", "epsilon", "% Optimal Action", new int[]{0, 100});
+	        View.episodeMatrixToMatlabScript2D("qLearning_visitedPairs.m", percentageStateActionPairsVisited, initEpsilonValues, "init.val." , "epsilon", "% State-Action pairs visited", new int[]{0, 100});
+	        View.episodeMatrixToMatlabScript2D("qLearning_nrSteps.m", nrStepsUsed, initEpsilonValues, "init.val.", "epsilon", "Number of steps", new int[]{0, 100});
 
         }
 
