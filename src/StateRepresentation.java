@@ -16,6 +16,7 @@ public class StateRepresentation {
     public static final int nrActions = Action.nrActions;
     public static final int nrStates = 21;
     public static final int nrStateActionPairs = nrStates * nrActions;
+    public static final int nrAbsorbingStateActionPairs = Action.nrActions;
 
     private double absentValue =  Environment.maximumReward+ 1;
     /**

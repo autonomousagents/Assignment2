@@ -13,11 +13,11 @@ public class Environment {
     private boolean isEnded;
     private Agent predator;
     private Agent prey;
-    private int predatorType = -1;
     public static final double maximumReward = 10;
     public static final double minimumReward = 0;
     public static final double normalReward = 0;
     int nrSteps;
+
 
     public Environment(Agent predator, Position preyStart) {
         this.isEnded = false;
@@ -26,6 +26,10 @@ public class Environment {
         nrSteps = 0;
     }
 
+    /**
+     * Should be invoked for any  time step in an episode
+     * Makes prey do move, makes predator do move, and then makes predator observe reward (and thus update values etc.)
+     */
     public void nextTimeStep() {
         predator.doMove(getPreyPos());
         prey.doMove(getPredatorPos());
@@ -52,13 +56,14 @@ public class Environment {
     }
 
     public void reset() {
-
-    	
         prey = new Prey(new Position(5, 5));
         isEnded = false;
         predator.reset();
     }
 
+    /**
+     * Reward function for the environment
+     */
     public static double reward(Position prey, Position predator) {
         if (prey.getX() == predator.getX() && prey.getY() == predator.getY()) {
             return maximumReward;
@@ -68,33 +73,29 @@ public class Environment {
         }
     }
 
-    public void setPredatorType(int nr) {
 
-        predatorType = nr;
-    }
-    
     public int getNrSteps(){
         return nrSteps;
     }
-    
+
     public void resetNrSteps(){
         nrSteps = 0;
     }
-    
+
     public void doRun(){
         boolean validRun = false;
         int invalidRun = 0;
         while(!validRun){
             while(!isEnded){
                 if(nrSteps<80000){
-                    nextTimeStep();  
+                    nextTimeStep();
                     nrSteps++;
                     if(isEnded){
                         validRun = true;
                     }
                 }
                 else{
-                    nrSteps = 0;                    
+                    nrSteps = 0;
                     System.out.println("invalid run" +invalidRun);
                     invalidRun++;
                     break;
@@ -102,6 +103,6 @@ public class Environment {
             }
             reset();
         }
-        
+
     }
 }

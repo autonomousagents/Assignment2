@@ -166,7 +166,7 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
                 QValuesEstimation.setValue(current.getState(), current.getAction(), value);
             }
         }        
-        SARcombis = new ArrayList<>();
+        SARcombis = new ArrayList<SARcombi>();
         currentNrRuns++;
     }
     
