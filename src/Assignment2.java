@@ -316,14 +316,14 @@ public class Assignment2 {
         }
 
     
-    public void firstShouldGraphs(boolean epsilonGreedy) {
+    public void firstShouldGraphs(boolean epsilonGreedy, double values[]) {
     	PredatorQLearning agent = new PredatorQLearning(0.9, 0.5, 0.1, 0.1, PredatorQLearning.ActionSelection.epsilonGreedy, new Position(0, 0));
         Environment env = new Environment(agent, new Position(5, 5));
         int nrTestRuns = 100;
         int nrEpisodes = 1000;
    	
 
-       double values[] = new double[]{ 0.01, 0.1, 0.5, 1 ,10};
+       
        
        
        double optimalActionValues[][] = new double[values.length][nrEpisodes];
@@ -372,8 +372,9 @@ public class Assignment2 {
     	boolean epsilonGreedy =  true;
     	boolean softmax = !epsilonGreedy;
     	
-    	firstShouldGraphs(epsilonGreedy);
-    	firstShouldGraphs(softmax);
+    //	firstShouldGraphs(epsilonGreedy,  new double[]{ 0.01, 0.1, 0.5, 1 });
+    //	System.out.println("finished greedy");
+    	firstShouldGraphs(softmax, new double[]{  0.1, 0.5, 1, 10});
     }
 
 
