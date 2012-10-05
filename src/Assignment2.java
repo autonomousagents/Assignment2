@@ -169,7 +169,7 @@ public class Assignment2 {
     
    public ArrayList<Integer> onPolicyMonteCarlo(double tau, int nrRuns, double init, double discount) {
         //double tau, int nrRuns, double init, Position startPos, Position startPosPrey
-        ArrayList<Integer> stepsPerRun = new ArrayList<>();
+        ArrayList<Integer> stepsPerRun = new ArrayList<Integer>();
         PredatorOnPolicyMonteCarlo agent = new PredatorOnPolicyMonteCarlo(tau, nrRuns, init, new Position(0, 0), new Position(5, 5), discount);
         Environment env = new Environment(agent, new Position(5, 5));
         View view = new View(env);

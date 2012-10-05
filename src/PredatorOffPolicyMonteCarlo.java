@@ -225,7 +225,7 @@ public class PredatorOffPolicyMonteCarlo implements Agent {
     }
     
     public void resetSAR(){
-        SARcombis=new ArrayList<>();
+        SARcombis=new ArrayList<SARcombi>();
     }
 
     private int lastUnequalAction() {
