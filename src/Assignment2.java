@@ -63,21 +63,61 @@ public class Assignment2 {
         }
     }
 
+    /**
+     *
+     * @see MonteCarloOnline(..)
+     *
+     * @param tau       : tau parameter of the softmax activation function
+     * @param nrRuns    : number of episodes
+     * @param init      : initial values for the Q(s,a) table
+     * @param discount  : discount factor
+     *
+     * @return steps per run needed to reach the goal, for the number of runs needed until convergence
+     */
+    public ArrayList<Integer> processEpisodesMonteCarloOnline(double tau, int nrRuns, double init, double discount) {
+        //double tau, int nrRuns, double init, Position startPos, Position startPosPrey
+        ArrayList<Integer> stepsPerRun = new ArrayList<Integer>();
+        PredatorOnPolicyMonteCarlo agent = new PredatorOnPolicyMonteCarlo(tau, nrRuns, init, new Position(0, 0), new Position(5, 5), discount);
+        Environment env = new Environment(agent, new Position(5, 5));
+        View view = new View(env);
+        int runNr = 0;
+        do {
+            env.doRun();
+            runNr++;
+            if (runNr % 20 == 0) {
+//                System.out.println(runNr);
+            }
+            agent.learnAfterEpisode();
+            env.reset();
+            stepsPerRun.add(env.getNrSteps());
+            env.resetNrSteps();
+        } while (!agent.isConverged());
+//        view.printSimple();
+        agent.setPrint(false);
+//        while (!env.isEnded()) {
+//            env.nextTimeStep();
+//            view.printSimple();
+//        }
+//        agent.printQValues(false, -1);
+//        view.printPolicy(agent, 5, 5);
+        return stepsPerRun;
+    }
+
     /**     
      * SECOND SHOULD #1
      *
      * On-policy Monte Carlo, using the Softmax activation function.
      *
-     * @param nrTrials  : number of episodes
+     * @param nrTrials  : number of trials (will be averaged over)
      * @param tau       : tau parameter of the softmax activation function
-     * @param nrRuns    : number of runs for each episode (will be averaged over)
+     * @param nrRuns    : number of episodes
      * @param init      : initial values for the Q(s,a) table
      * @param discount  : discount factor
      */
     private void MonteCarloOnline(int nrTrials, double tau, int nrRuns, double init, double discount) {
         ArrayList<ArrayList<Integer>> stepsPerRun = new ArrayList<ArrayList<Integer>>();
         for (int i = 0; i < nrTrials; i++) {
-            stepsPerRun.add(onPolicyMonteCarlo(tau, nrRuns, init, discount));
+            stepsPerRun.add(processEpisodesMonteCarloOnline(tau, nrRuns, init, discount));
             System.out.println("Trial: " + i);
         }
         int[] average = new int[nrRuns];
@@ -96,6 +136,41 @@ public class Assignment2 {
             }
         }
         System.out.println("]");
+    }
+
+    /**
+     *
+     * @see MonteCarloOffline(..)
+     */
+    public void runEstimationPolicyAgent(Environment env, PredatorOffPolicyMonteCarlo agent, View v, boolean print) {
+        boolean validRun = false;
+        int invalidRun = 0;
+        int nrSteps = 0;
+        while (!validRun) {
+            while (!env.isEnded()) {
+                if (nrSteps < 80000) {
+                    env.nextTimeStep();
+                    if (print) {
+                        v.printSimple();
+                    }
+                    nrSteps++;
+                    nrSteps++;
+                    if (env.isEnded()) {
+                        validRun = true;
+                    }
+                }
+                else {
+                    nrSteps = 0;
+                    System.out.println("invalid run" + invalidRun);
+                    invalidRun++;
+                    agent.resetSAR();
+                    env.resetNrSteps();
+                    env.reset();
+                    break;
+                }
+            }
+            env.reset();
+        }
     }
 
     /**
@@ -120,7 +195,7 @@ public class Assignment2 {
         int runView = 10;
         int runNr = 0;
         do {
-            doRunMain(env, agentOffLineMC, v, false);
+            runEstimationPolicyAgent(env, agentOffLineMC, v, false);
             runNr++;
             if (runNr % runView == 0) {
                 System.out.println(runNr);
@@ -131,7 +206,7 @@ public class Assignment2 {
             env.resetNrSteps();
 
             agentOffLineMC.useBehaviorPolicy(false);
-            doRunMain(env, agentOffLineMC, v, false);
+            runEstimationPolicyAgent(env, agentOffLineMC, v, false);
             stepsPerRun.add(env.getNrSteps());
             env.reset();
             env.resetNrSteps();
@@ -163,9 +238,9 @@ public class Assignment2 {
      * @param nrTrials          : number of trials (will be averaged over)
      * @param nrRunsBehavior    : number of episodes for behaviour policy
      */
-    public void MonteCarloOffline(double tau, int nrRuns, double init, double discount, int nrTrials, int nrRunsBehavior){
+    public void MonteCarloOffline(double tau, int nrRuns, double init, double discount, int nrTrials, int nrRunsBehavior) {
         PredatorOnPolicyMonteCarlo agentOnLineMC = new PredatorOnPolicyMonteCarlo(tau, nrRunsBehavior, init, new Position(0, 0), new Position(5, 5), discount);
-        Environment env = new Environment(agentOnLineMC, new Position(5,5));
+        Environment env = new Environment(agentOnLineMC, new Position(5, 5));
 
         do {
             env.doRun();
@@ -174,87 +249,27 @@ public class Assignment2 {
         } while (!agentOnLineMC.isConverged());
         StateRepresentation QvaluesBehavior = agentOnLineMC.getQvalues();
         ArrayList<ArrayList<Integer>> stepsPerRun = new ArrayList<ArrayList<Integer>>();
-        for(int i = 0; i<nrTrials;i++){
+        for (int i = 0; i < nrTrials; i++) {
             System.out.println("Trial: " + i);
             stepsPerRun.add(processEstimationPolicyMonteCarloOffline(tau, nrRuns, init, discount, QvaluesBehavior));
         }
-        int[] average = new int [nrRuns];
+        int[] average = new int[nrRuns];
         System.out.print("\n[");
-        for(int i = 0; i<nrRuns;i++){
+        for (int i = 0; i < nrRuns; i++) {
             int total = 0;
-            for(int j =0;j<nrTrials;j++){
-                total+=stepsPerRun.get(j).get(i);
+            for (int j = 0; j < nrTrials; j++) {
+                total += stepsPerRun.get(j).get(i);
             }
-            average[i] = total/nrTrials;
-            if(i==nrRuns-1){
+            average[i] = total / nrTrials;
+            if (i == nrRuns - 1) {
                 System.out.print(average[i]);
             }
-            else{
-                System.out.print(average[i]+",");
+            else {
+                System.out.print(average[i] + ",");
             }
         }
         System.out.println("]");
 
-    }
-
-    public void doRunMain(Environment env, PredatorOffPolicyMonteCarlo agent, View v, boolean print) {
-        boolean validRun = false;
-        int invalidRun = 0;
-        int nrSteps = 0;
-        while (!validRun) {
-            while (!env.isEnded()) {
-                if (nrSteps < 80000) {
-                    env.nextTimeStep();
-                    if (print) {
-                        v.printSimple();
-                    }
-                    nrSteps++;
-                    nrSteps++;
-                    if (env.isEnded()) {
-                        validRun = true;
-                    }
-                }
-                else {
-                    nrSteps = 0;
-                    System.out.println("invalid run" + invalidRun);
-                    invalidRun++;
-                    agent.resetSAR();
-                    env.resetNrSteps();
-                    env.reset();
-                    break;
-                }
-            }
-            env.reset();
-        }
-    }
-
-    public ArrayList<Integer> onPolicyMonteCarlo(double tau, int nrRuns, double init, double discount) {
-        //double tau, int nrRuns, double init, Position startPos, Position startPosPrey
-        ArrayList<Integer> stepsPerRun = new ArrayList<Integer>();
-        PredatorOnPolicyMonteCarlo agent = new PredatorOnPolicyMonteCarlo(tau, nrRuns, init, new Position(0, 0), new Position(5, 5), discount);
-        Environment env = new Environment(agent, new Position(5, 5));
-        View view = new View(env);
-        int runNr = 0;
-        do {
-            env.doRun();
-            runNr++;
-            if (runNr % 20 == 0) {
-//                System.out.println(runNr);
-            }
-            agent.learnAfterEpisode();
-            env.reset();
-            stepsPerRun.add(env.getNrSteps());
-            env.resetNrSteps();
-        } while (!agent.isConverged());
-//        view.printSimple();
-        agent.setPrint(false);
-//        while (!env.isEnded()) {
-//            env.nextTimeStep();
-//            view.printSimple();
-//        }
-//        agent.printQValues(false, -1);
-//        view.printPolicy(agent, 5, 5);
-        return stepsPerRun;
     }
 
     /**
@@ -570,8 +585,8 @@ public class Assignment2 {
         // a.QLearningCompareEpsilonsAndInits(); // Second Must
         //a.QLearningCompareActionselections(); // First Should
 
-     //    a.MonteCarloOnline(5, 0.8,500,15.0,0.8);
-       // a.MonteCarloOffline(0.8, 400, 15.0, 0.9, 4,600);
+        //    a.MonteCarloOnline(5, 0.8,500,15.0,0.8);
+        // a.MonteCarloOffline(0.8, 400, 15.0, 0.9, 4,600);
 
     }
 }
