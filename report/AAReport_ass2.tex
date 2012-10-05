@@ -146,9 +146,7 @@ The values chosen to evaluate were the combinations of a low initialization valu
 \subsection{(SC) Softmax action selection instead of $\epsilon$-greedy}\label{sec:exercise3}
 For this exercise we will try to illustrate the difference between $\epsilon$-greedy and softmax. These two methods are both for action selection and this will most likely have an impact on the way that the state action pairs are explored. $\epsilon$-greedy will have a fixed chance of trying to explore a random action for the current state. For softmax the greedy action is still given the highest selection probability, but all the others are ranked and weighted according to their value estimates.\footnote{Suttion, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 30} 
 
-Through the following plots in figure \ref{plot:secondShould} we will show the effects of the different values of $\tau$ and $\epsilon$ on exploration. The performance of both algorithms seem to be on par with each other, and show very similar behavior. 
-
-Figure \ref{plot:QSalphagamma} shows plots on the performance of the agent over time for different $\alpha$ and for different $\gamma$ (discount factor), this time using softmax action selection.
+Through the following plots in figure \ref{plot:secondShould} we will show the effects of the different values of $\tau$ and $\epsilon$ on exploration. The performance of both algorithms seem to be on par with each other, and show very similar behavior. however Softmax explores more than $\epsilon$-greedy, in both the beginning and later on except in the random policies as shown in figures \ref{fig:secondShould_Greedy_nrSteps} and \ref{fig:secondShould_Softmax_nrSteps}, and because of this exploratory property Softmax's model seems to converge faster with higher values of $\tau$ as show in figure \ref{fig:secondShould_Softmax_OA} compared to figure \ref{fig:secondShould_Greedy_OA}. Another thing to note is that for higher values of $\tau$ that which would be considered more a random policy than a greedy policy, the Softmax action selection visits all of the unique state action pairs sooner than the $\epsilon$-greedy action selection.
 
 \begin{figure}[ht]
 \centering
@@ -179,19 +177,6 @@ Figure \ref{plot:QSalphagamma} shows plots on the performance of the agent over 
 \caption{Plots on the performance of the agent over time for different values of $\epsilon$ using $\epsilon$-greedy action selection (figures \ref{fig:secondShould_Greedy_nrSteps}, \ref{fig:secondShould_Greedy_OA} and \ref{fig:secondShould_Greedy_visitedPairs}) and for different values of $\tau$ using the Softmax action selection (figures \ref{fig:secondShould_Softmax_nrSteps}, \ref{fig:secondShould_Softmax_OA} and \ref{fig:secondShould_Softmax_visitedPairs}). Averaged over 100 runs with 1000 episodes each with $\gamma = $ 0.9, the learning rate $\alpha$ = 0.5 and the initialization value at 15.}
 \label{plot:secondShould}
 \end{figure}
-
-\todo[inline, color=yellow]{Experiment with different values of $\epsilon$ and the optimistic initialization of the Q-table. Make up good values to test, and explain why you chose these values.}
-
-\subsection{(SC) Softmax action selection instead of $\epsilon$-greedy}\label{sec:exercise3}
-For this exercise, we did the same as we did in section \ref{sec:exercise1}, but instead of using $\epsilon$-greedy action selection we used softmax action selection. This means that the greedy action is still given the highest selection probability, but all the others are ranked and weighted according to their value estimates.\footnote{Sutton, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 30}
-
-Figure \ref{plot:QSalphagamma} shows plots on the performance of the agent over time for different $\alpha$ and for different $\gamma$ (discount factor), this time using softmax action selection.
-
-%\begin{figure}
-\missingfigure{Plots on the performance of the agent over time for different $\alpha$ and for different $\gamma$ (discount factor) using softmax action selection.} \label{plot:QSalphagamma}
-%\end{figure}
-
-\todo[inline, color=yellow]{Illustrate the difference between $\epsilon$-greedy and softmax, using graphs from your empirical results.}
 
 \subsection{Other ways to do learning}
 
