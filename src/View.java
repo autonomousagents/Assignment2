@@ -215,12 +215,14 @@ public class View {
                      plotText.append(",");
                 plotText.append("xAxis, E").append(j);
             }
+            plotText.append(", 'LineWidth',1.5");
             plotText.append(");");
             
             out.write(plotText.toString());
             out.newLine();
 
-            out.write( "ylim([" + yMinMaxValues[0] + " " + yMinMaxValues[1] + "]);"
+//            out.write( "ylim([" + yMinMaxValues[0] + " " + yMinMaxValues[1] + "]);"
+            out.write("title('Agent performance');"
                         + "xlabel('Episode');"
                         + "ylabel('" + yLabel + "');");
             out.newLine();
