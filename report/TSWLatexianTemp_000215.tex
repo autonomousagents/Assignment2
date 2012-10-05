@@ -202,7 +202,7 @@ On Policy Monte Carlo Control differs from other methods in the fact that the ag
 
 There are a number of parameters used in the implementation of this learning method. The first parameter is $\tau$ for the softmax policy, determining how much the agent will explore. The number of runs which determines how much the agent will learn. The initialization for the Q-values which is still optimistic and the discount factor $\lambda$.\\  
 
-How the number of steps needed to catch a prey changes over the number of runs for different parameter settings can be seen in figures \ref{fig:onLineMonteCarloDiscount} and \ref{fig:onLineMonteCarloTau}. 
+How the number of steps needed to catch a prey changes over the number of runs for different parameter settings can be seen in figures \ref{fig:onLineMonteCarloDiscount} and \ref{fig:onLineMonteCarloTau}. The resulting policy can be found in Appendix \ref{policyOnLineMonteCarlo}.
 
 \begin{figure}
 \centering
@@ -225,7 +225,17 @@ How the number of steps needed to catch a prey changes over the number of runs f
 
 Off-policy Monte Carlo control follows the behavior policy while learning about and improving the estimation policy, which makes it different from other learning methods.\footnote{Sutton, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 126} The behavior policy is a $\epsilon$-soft policy and therefore keeps exploring, while the estimation policy can be a deterministic greedy policy. In order to transfer the learned information from the behavior policy to the estimation policy importance sampling is used, since the probability of taking an action in one policy is not the same as in the other.\\
 
-In this specific case the behavior policy is a softmax policy learned with the on-line Monte Carlo method, using 600 runs. 
+In this specific case the behavior policy is a softmax policy learned with the on-line Monte Carlo method, using 600 runs, a discount factor of 0.9 and $\tau$ is set to 0.9.
+
+How the number of steps per episodes changes dusring learning in this implementation can be seen in figure \ref{offLine}. The resulting policy can be found in Appendix \ref{policyOffLineMonteCarlo}.
+
+\begin{figure}
+\centering
+\label{offLine}
+\caption{The number of steps for each episode averaged over 5 trials where the agent learns for 150 runs}
+\includegraphics[scale=0.8]{offpolicy.png}
+\end{figure}
+
 
 
 \subsubsection{(SC) Sarsa}\label{sec:exercise4.3}
@@ -277,6 +287,166 @@ If $s_{t+1}$ is terminal, then $Q(s_{t+1},a_{t+1})$ is defined as zero. As you c
 \newpage
 \appendix
 \appendixpage
+<<<<<<< HEAD
+\section{Class Diagram} \label{app:classDiagram}
+\appendixpage
+\section{Policy of On Line Monte Carlo} \label{policyOnLineMonteCarlo}
+The policy resulting from On Line Monte Carlo learning can be found in Table \ref{policyOnline}
+ \begin{table}[htbp]
+\caption{The policy resulting from On Line Monte Carlo learning method with $\tau$ is 0.9 and discount factor is 0.9 after 500 episodes}
+\label{policyOnline}
+\centering
+\begin{footnotesize}
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|}
+&0&1&2&3&4&5&6&7&8&9&10\\ \hline\\
+0&U 0,189&U 0,176&U 0,181&U 0,149&U 0,120&U 0,097&U 0,120&U 0,149&U 0,181&U 0,176&U 0,189\\
+&R 0,220&R 0,239&R 0,250&R 0,241&R 0,132&R 0,078&R 0,118&R 0,119&R 0,132&R 0,165&R 0,194\\
+&D 0,207&D 0,234&D 0,263&D 0,317&D 0,421&D 0,575&D 0,421&D 0,317&D 0,263&D 0,234&D 0,207\\
+&L 0,194&L 0,165&L 0,132&L 0,119&L 0,118&L 0,046&L 0,132&L 0,241&L 0,250&L 0,239&L 0,220\\
+&W 0,190&W 0,186&W 0,173&W 0,175&W 0,209&W 0,203&W 0,209&W 0,175&W 0,173&W 0,186&W 0,190\\
+\hline \\
+1&U 0,165&U 0,137&U 0,118&U 0,070&U 0,050&U 0,036&U 0,050&U 0,070&U 0,118&U 0,137&U 0,176\\
+&R 0,234&R 0,276&R 0,335&R 0,359&R 0,357&R 0,046&R 0,040&R 0,069&R 0,107&R 0,135&R 0,165\\
+&D 0,239&D 0,282&D 0,250&D 0,349&D 0,424&D 0,752&D 0,424&D 0,349&D 0,250&D 0,282&D 0,234\\
+&L 0,176&L 0,135&L 0,107&L 0,069&L 0,040&L 0,129&L 0,357&L 0,359&L 0,335&L 0,276&L 0,239\\
+&W 0,186&W 0,169&W 0,190&W 0,152&W 0,128&W 0,037&W 0,128&W 0,152&W 0,190&W 0,169&W 0,186\\
+\hline \\
+2&U 0,132&U 0,107&U 0,083&U 0,056&U 0,004&U 0,003&U 0,004&U 0,056&U 0,083&U 0,118&U 0,132\\
+&R 0,263&R 0,250&R 0,299&R 0,403&R 0,301&R 0,003&R 0,054&R 0,048&R 0,074&R 0,107&R 0,181\\
+&D 0,250&D 0,335&D 0,433&D 0,344&D 0,550&D 0,944&D 0,550&D 0,344&D 0,433&D 0,250&D 0,250\\
+&L 0,181&L 0,118&L 0,074&L 0,048&L 0,054&L 0,048&L 0,301&L 0,403&L 0,299&L 0,335&L 0,263\\
+&W 0,173&W 0,190&W 0,111&W 0,150&W 0,090&W 0,003&W 0,090&W 0,150&W 0,111&W 0,190&W 0,173\\
+\hline \\
+3&U 0,119&U 0,069&U 0,048&U 0,012&U 0,031&U 0,053&U 0,031&U 0,012&U 0,056&U 0,069&U 0,119\\
+&R 0,317&R 0,349&R 0,344&R 0,672&R 0,092&R 0,001&R 0,052&R 0,007&R 0,048&R 0,070&R 0,149\\
+&D 0,241&D 0,359&D 0,403&D 0,110&D 0,822&D 0,941&D 0,822&D 0,110&D 0,344&D 0,359&D 0,241\\
+&L 0,149&L 0,070&L 0,056&L 0,007&L 0,052&L 0,001&L 0,092&L 0,672&L 0,403&L 0,349&L 0,317\\
+&W 0,175&W 0,152&W 0,150&W 0,199&W 0,002&W 0,004&W 0,002&W 0,199&W 0,150&W 0,152&W 0,175\\
+\hline \\
+4&U 0,118&U 0,040&U 0,054&U 0,052&U 0,019&U 0,001&U 0,019&U 0,031&U 0,054&U 0,040&U 0,118\\
+&R 0,421&R 0,424&R 0,550&R 0,822&R 0,977&R 0,144&R 0,003&R 0,052&R 0,004&R 0,050&R 0,120\\
+&D 0,132&D 0,357&D 0,301&D 0,092&D 0,001&D 0,855&D 0,001&D 0,822&D 0,301&D 0,357&D 0,132\\
+&L 0,120&L 0,050&L 0,004&L 0,031&L 0,003&L 0,000&L 0,977&L 0,092&L 0,550&L 0,424&L 0,421\\
+&W 0,209&W 0,128&W 0,090&W 0,002&W 0,001&W 0,000&W 0,001&W 0,002&W 0,090&W 0,128&W 0,209\\
+\hline \\
+5&U 0,046&U 0,129&U 0,048&U 0,001&U 0,000&&U 0,001&U 0,001&U 0,048&U 0,129&U 0,046\\
+&R 0,575&R 0,752&R 0,944&R 0,941&R 0,855&&R 0,000&R 0,053&R 0,003&R 0,036&R 0,097\\
+&D 0,078&D 0,046&D 0,003&D 0,001&D 0,144&Prey&D 0,855&D 0,001&D 0,003&D 0,046&D 0,078\\
+&L 0,097&L 0,036&L 0,003&L 0,053&L 0,001&&L 0,144&L 0,941&L 0,944&L 0,752&L 0,575\\
+&W 0,203&W 0,037&W 0,003&W 0,004&W 0,000&&W 0,000&W 0,004&W 0,003&W 0,037&W 0,203\\
+\hline \\
+6&U 0,132&U 0,357&U 0,301&U 0,092&U 0,977&U 0,855&U 0,977&U 0,092&U 0,301&U 0,357&U 0,132\\
+&R 0,421&R 0,424&R 0,550&R 0,822&R 0,001&R 0,144&R 0,019&R 0,031&R 0,004&R 0,050&R 0,120\\
+&D 0,118&D 0,040&D 0,054&D 0,052&D 0,003&D 0,001&D 0,003&D 0,052&D 0,054&D 0,040&D 0,118\\
+&L 0,120&L 0,050&L 0,004&L 0,031&L 0,019&L 0,000&L 0,001&L 0,822&L 0,550&L 0,424&L 0,421\\
+&W 0,209&W 0,128&W 0,090&W 0,002&W 0,001&W 0,000&W 0,001&W 0,002&W 0,090&W 0,128&W 0,209\\
+\hline \\
+7&U 0,241&U 0,359&U 0,403&U 0,672&U 0,822&U 0,941&U 0,822&U 0,672&U 0,403&U 0,359&U 0,241\\
+&R 0,317&R 0,349&R 0,344&R 0,110&R 0,092&R 0,001&R 0,052&R 0,012&R 0,056&R 0,070&R 0,149\\
+&D 0,119&D 0,069&D 0,048&D 0,007&D 0,031&D 0,053&D 0,031&D 0,007&D 0,048&D 0,069&D 0,119\\
+&L 0,149&L 0,070&L 0,056&L 0,012&L 0,052&L 0,001&L 0,092&L 0,110&L 0,344&L 0,349&L 0,317\\
+&W 0,175&W 0,152&W 0,150&W 0,199&W 0,002&W 0,004&W 0,002&W 0,199&W 0,150&W 0,152&W 0,175\\
+\hline \\
+8&U 0,250&U 0,335&U 0,299&U 0,344&U 0,550&U 0,944&U 0,550&U 0,344&U 0,299&U 0,335&U 0,250\\
+&R 0,263&R 0,250&R 0,433&R 0,403&R 0,301&R 0,003&R 0,054&R 0,048&R 0,083&R 0,118&R 0,181\\
+&D 0,132&D 0,107&D 0,074&D 0,056&D 0,004&D 0,003&D 0,004&D 0,056&D 0,074&D 0,107&D 0,132\\
+&L 0,181&L 0,118&L 0,083&L 0,048&L 0,054&L 0,048&L 0,301&L 0,403&L 0,433&L 0,250&L 0,263\\
+&W 0,173&W 0,190&W 0,111&W 0,150&W 0,090&W 0,003&W 0,090&W 0,150&W 0,111&W 0,190&W 0,173\\
+\hline \\
+9&U 0,239&U 0,276&U 0,250&U 0,349&U 0,424&U 0,752&U 0,424&U 0,349&U 0,250&U 0,276&U 0,239\\
+&R 0,234&R 0,282&R 0,335&R 0,359&R 0,357&R 0,046&R 0,040&R 0,069&R 0,107&R 0,137&R 0,176\\
+&D 0,165&D 0,135&D 0,118&D 0,070&D 0,050&D 0,036&D 0,050&D 0,070&D 0,118&D 0,135&D 0,165\\
+&L 0,176&L 0,137&L 0,107&L 0,069&L 0,040&L 0,129&L 0,357&L 0,359&L 0,335&L 0,282&L 0,234\\
+&W 0,186&W 0,169&W 0,190&W 0,152&W 0,128&W 0,037&W 0,128&W 0,152&W 0,190&W 0,169&W 0,186\\
+\hline \\
+10&U 0,220&U 0,234&U 0,263&U 0,317&U 0,421&U 0,575&U 0,421&U 0,317&U 0,263&U 0,234&U 0,220\\
+&R 0,207&R 0,239&R 0,250&R 0,241&R 0,132&R 0,078&R 0,118&R 0,119&R 0,132&R 0,165&R 0,189\\
+&D 0,194&D 0,176&D 0,181&D 0,149&D 0,120&D 0,097&D 0,120&D 0,149&D 0,181&D 0,176&D 0,194\\
+&L 0,189&L 0,165&L 0,132&L 0,119&L 0,118&L 0,046&L 0,132&L 0,241&L 0,250&L 0,239&L 0,207\\
+&W 0,190&W 0,186&W 0,173&W 0,175&W 0,209&W 0,203&W 0,209&W 0,175&W 0,173&W 0,186&W 0,190\\
+\hline \\
+\end{tabular}
+\end{footnotesize}
+\end{table}
+\section{Policy of Off Line Monte Carlo} \label{policyOffLineMonteCarlo}
+The policy resulting from Off Line Monte Carlo learning can be found in Table \ref{policyOffline}
+ \begin{table}[htbp]
+\caption{The estimation policy resulting from Off Line Monte Carlo learning method after 150 episodes of learning. The behavior policy that is used is generated by On Line Monte Carlo learning with $\tau$ is 0.9 and discount factor is 0.9 after 600 episodes}
+\label{policyOffline}
+\centering
+\begin{footnotesize}
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|}
+&0&1&2&3&4&5&6&7&8&9&10\\ \hline\\
+0&U 1,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 1,000\\
+&R 0,000&R 0,000&R 0,000&R 1,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000\\
+&D 0,000&D 1,000&D 1,000&D 0,000&D 1,000&D 1,000&D 1,000&D 0,000&D 1,000&D 1,000&D 0,000\\
+&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 1,000&L 0,000&L 0,000&L 0,000\\
+&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000\\
+\hline \\
+1&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000\\
+&R 1,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000\\
+&D 0,000&D 1,000&D 1,000&D 1,000&D 0,000&D 1,000&D 0,000&D 1,000&D 1,000&D 1,000&D 1,000\\
+&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000\\
+&W 0,000&W 0,000&W 0,000&W 0,000&W 1,000&W 0,000&W 1,000&W 0,000&W 0,000&W 0,000&W 0,000\\
+\hline \\
+2&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000\\
+&R 1,000&R 1,000&R 0,000&R 0,000&R 1,000&R 0,000&R 0,000&R 0,000&R 1,000&R 0,000&R 0,000\\
+&D 0,000&D 0,000&D 0,000&D 1,000&D 0,000&D 1,000&D 0,000&D 1,000&D 0,000&D 1,000&D 0,000\\
+&L 0,000&L 0,000&L 1,000&L 0,000&L 0,000&L 0,000&L 1,000&L 0,000&L 0,000&L 0,000&L 1,000\\
+&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000\\
+\hline \\
+3&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000\\
+&R 0,000&R 1,000&R 1,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000\\
+&D 1,000&D 0,000&D 0,000&D 1,000&D 1,000&D 1,000&D 1,000&D 1,000&D 1,000&D 0,000&D 1,000\\
+&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 1,000&L 0,000\\
+&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000\\
+\hline \\
+4&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000\\
+&R 1,000&R 0,000&R 0,000&R 1,000&R 0,000&R 1,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000\\
+&D 0,000&D 0,000&D 1,000&D 0,000&D 1,000&D 0,000&D 1,000&D 1,000&D 1,000&D 0,000&D 0,000\\
+&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 1,000\\
+&W 0,000&W 1,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 1,000&W 0,000\\
+\hline \\
+5&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000\\
+&R 1,000&R 1,000&R 1,000&R 1,000&R 0,000&&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000\\
+&D 0,000&D 0,000&D 0,000&D 0,000&D 1,000&Prey&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000\\
+&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&&L 1,000&L 1,000&L 1,000&L 1,000&L 1,000\\
+&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000\\
+\hline \\
+6&U 0,000&U 0,000&U 1,000&U 0,000&U 0,000&U 0,000&U 0,000&U 0,000&U 1,000&U 0,000&U 0,000\\
+&R 1,000&R 0,000&R 0,000&R 1,000&R 1,000&R 1,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000\\
+&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000\\
+&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 1,000&L 1,000&L 0,000&L 0,000&L 1,000\\
+&W 0,000&W 1,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 1,000&W 0,000\\
+\hline \\
+7&U 1,000&U 0,000&U 0,000&U 0,000&U 1,000&U 1,000&U 1,000&U 0,000&U 0,000&U 0,000&U 1,000\\
+&R 0,000&R 1,000&R 1,000&R 1,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000\\
+&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000\\
+&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 1,000&L 1,000&L 1,000&L 0,000\\
+&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000\\
+\hline \\
+8&U 0,000&U 0,000&U 0,000&U 1,000&U 0,000&U 1,000&U 0,000&U 1,000&U 0,000&U 0,000&U 0,000\\
+&R 1,000&R 1,000&R 0,000&R 0,000&R 1,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000\\
+&D 0,000&D 0,000&D 1,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 1,000&D 0,000&D 0,000\\
+&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 1,000&L 0,000&L 0,000&L 1,000&L 1,000\\
+&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000\\
+\hline \\
+9&U 0,000&U 0,000&U 1,000&U 1,000&U 0,000&U 1,000&U 0,000&U 1,000&U 1,000&U 0,000&U 0,000\\
+&R 1,000&R 1,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000\\
+&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000\\
+&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 1,000&L 1,000\\
+&W 0,000&W 0,000&W 0,000&W 0,000&W 1,000&W 0,000&W 1,000&W 0,000&W 0,000&W 0,000&W 0,000\\
+\hline \\
+10&U 0,000&U 1,000&U 1,000&U 0,000&U 1,000&U 1,000&U 1,000&U 0,000&U 1,000&U 1,000&U 0,000\\
+&R 0,000&R 0,000&R 0,000&R 1,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 0,000&R 1,000\\
+&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000&D 0,000\\
+&L 1,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 0,000&L 1,000&L 0,000&L 0,000&L 0,000\\
+&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000&W 0,000\\
+\hline \\
+\end{tabular}
+\end{footnotesize}
+\end{table}
+=======
 %\section*{}
 \clearpage
 \section{Class diagram}\label{app:classDiagram}
@@ -284,5 +454,6 @@ If $s_{t+1}$ is terminal, then $Q(s_{t+1},a_{t+1})$ is defined as zero. As you c
         \center{\includegraphics[width=0.9\textwidth]{klassediagram_ass2.png}}
         \caption{\label{pic:classDiagram} A class diagram of our code. For clarity purposes, not all methods and attributes of the classes are shown.}
 \end{figure}
+>>>>>>> klassediagram erbij
 
 \end{document}
