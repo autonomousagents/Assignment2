@@ -34,10 +34,7 @@ public class PredatorQLearning implements Agent {
     private boolean allStateActionPairsVisited;
     private ArrayList<StateActionPair> stateActionPairsVisited;
 
-    public double[] policy(Position prey, Position predator) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+    
     /**
      * Private class for a state and action pair,
      * can be used for statistics
@@ -224,7 +221,7 @@ public class PredatorQLearning implements Agent {
 
 
     /**
-     * Pick an actionwith Softmax considering the prey's location
+     * Pick an action with Softmax action selection considering the prey's location
      *
      * @remark remembers old state and position
      *
@@ -273,7 +270,7 @@ public class PredatorQLearning implements Agent {
 
 
     /**
-     * Pick an actionwith Softmax considering the prey's location
+     * Pick an action with Epsilon-greedy action selection considering the prey's location
      *
      * @remark remembers old state and position
      *
@@ -413,6 +410,10 @@ public class PredatorQLearning implements Agent {
 
     public boolean allStatesVisited(){
     	return allStateActionPairsVisited;
+    }
+
+    public double[] policy(Position prey, Position predator) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void printQValues(boolean latex, int action) {
