@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.1.5)  5 OCT 2012 23:22
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.1.5)  5 OCT 2012 23:35
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000178.tex"
-(/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000178.tex
+**"/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000212.tex"
+(/Users/Maaike/Documents/School/Vakken UvA/Autonomous Agents/Assignment2/report/TSWLatexianTemp_000212.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, nohyphenation, german-x-2009-06-19, ngerman-x-2009-06-19, ancientgreek, ibycus, arabic, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, galician, german, ngerman, monogreek, greek, hungarian, icelandic, indonesian, interlingua, irish, italian, kurmanji, latin, latvian, lithuanian, mongolian, mongolian2a, bokmal, nynorsk, polish, portuguese, romanian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, turkish, ukenglish, ukrainian, uppersorbian, welsh, loaded.
 (/usr/local/texlive/2009/texmf-dist/tex/latex/base/article.cls
@@ -347,8 +347,8 @@ File: tikzlibraryfit.code.tex 2008/02/06 v2.00 (rcs-revision 1.2)
 ) (/usr/local/texlive/2009/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2008/02/12 v2.00 (rcs-revision 1.5)
 )
-No file TSWLatexianTemp_000178.aux.
-\openout1 = `TSWLatexianTemp_000178.aux'.
+No file TSWLatexianTemp_000212.aux.
+\openout1 = `TSWLatexianTemp_000212.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
@@ -590,8 +590,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 232--235
  []
 
 [5] [6]
-No file TSWLatexianTemp_000178.bbl.
-[7] [8 <./QLearningGammaNRMSE.png (PNG copy)> <./QLearningGammaNRMSE_detail.png (PNG copy)> <./QLearningGammaOA.png (PNG copy)>] [9 <./secondMust_nrSteps.png (PNG copy)> <./secondMust_optimalAction.png (PNG copy)> <./secondMust_nrSteps_detail.png (PNG copy)> <./secondMust_visitedPairs_detail.png (PNG copy)>] [10 <./secondShould_Greedy_nrSteps.png (PNG copy)> <./secondShould_Softmax_nrSteps.png (PNG copy)> <./secondShould_Greedy_OA.png (PNG copy)> <./secondShould_Softmax_OA.png (PNG copy)> <./secondShould_Greedy_visitedPairs.png (PNG copy)> <./secondShould_Softmax_visitedPairs.png (PNG copy)>] [11 <./averagesInOneFig_online_discountFact.png (PNG copy)> <./averagesInOneFig_online_Tau.png (PNG copy)>] (./TSWLatexianTemp_000178.aux)
+No file TSWLatexianTemp_000212.bbl.
+[7] [8 <./QLearningGammaNRMSE.png (PNG copy)> <./QLearningGammaNRMSE_detail.png (PNG copy)> <./QLearningGammaOA.png (PNG copy)>] [9 <./secondMust_nrSteps.png (PNG copy)> <./secondMust_optimalAction.png (PNG copy)> <./secondMust_nrSteps_detail.png (PNG copy)> <./secondMust_visitedPairs_detail.png (PNG copy)>] [10 <./secondShould_Greedy_nrSteps.png (PNG copy)> <./secondShould_Softmax_nrSteps.png (PNG copy)> <./secondShould_Greedy_OA.png (PNG copy)> <./secondShould_Softmax_OA.png (PNG copy)> <./secondShould_Greedy_visitedPairs.png (PNG copy)> <./secondShould_Softmax_visitedPairs.png (PNG copy)>] [11 <./averagesInOneFig_online_discountFact.png (PNG copy)> <./averagesInOneFig_online_Tau.png (PNG copy)>] <klassediagram_ass2.png, id=83, 922.44624pt x 962.59625pt>
+File: klassediagram_ass2.png Graphic file (type png)
+ <use klassediagram_ass2.png> [12
+
+ <./klassediagram_ass2.png>] (./TSWLatexianTemp_000212.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -600,17 +604,17 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 10119 strings out of 493848
- 177975 string characters out of 3149208
+ 10125 strings out of 493848
+ 178122 string characters out of 3149208
  238549 words of memory out of 3000000
- 13181 multiletter control sequences out of 15000+200000
+ 13186 multiletter control sequences out of 15000+200000
  11928 words of font info for 42 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
  54i,9n,78p,1611b,683s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on TSWLatexianTemp_000178.pdf (11 pages, 530470 bytes).
+Output written on TSWLatexianTemp_000212.pdf (12 pages, 655446 bytes).
 PDF statistics:
- 154 PDF objects out of 1000 (max. 8388607)
+ 159 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 108 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 113 words of extra memory for PDF output out of 10000 (max. 10000000)
 
