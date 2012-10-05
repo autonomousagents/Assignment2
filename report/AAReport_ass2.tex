@@ -102,16 +102,37 @@ Figure \ref{plot:QSalphagamma} shows plots on the performance of the agent over 
 \subsection{Other ways to do learning}
 
 \subsubsection{(SC) On-policy Monte Carlo Control}\label{sec:exercise4.1}
-As mentioned in section \ref{sec:exercise1}, on-policy methods try to evaluate or improve the policy that is used to make decisions.\footnote{Sutton, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 122} Monte Carlo estimation can be used to approximate optimal policies, which results in Monte Carlo control. It proceeds according to the idea of generalized policy iteration, where one maintains both an approximate policy and an approximate value function. The value function is repeatedly altered to more closely approximate the value function for the current policy, and the policy is repeatedly improved with respect to the current value function.\footnote{Sutton, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 118} In this case, our policy moves towards a softmax policy, which was previously explained in section \ref{sec:exercise3}. Furthermore, it is necessary to use exploring starts because making the policy greedy prevents further exploration of nongreedy actions.\\ 
+As mentioned in section \ref{sec:exercise1}, on-policy methods try to evaluate or improve the policy that is used to make decisions.\footnote{Sutton, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 122} Monte Carlo estimation can be used to approximate optimal policies, which results in Monte Carlo control. It proceeds according to the idea of generalized policy iteration, where one maintains both an approximate policy and an approximate value function. The value function is repeatedly altered to more closely approximate the value function for the current policy, and the policy is repeatedly improved with respect to the current value function.\footnote{Sutton, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 118} In this case, our policy moves towards a softmax policy, which was previously explained in section \ref{sec:exercise3}. Furthermore, it is necessary to use either exploring starts or and $\epsilon$-soft policy because making the policy greedy prevents further exploration of nongreedy actions. Since an assumption of exploring starts is an unlikely assumption an $\epsilon$-soft policy is used in this case: softmax.\\ 
+
+On Policy Monte Carlo Control differs from other methods in the fact that the agent does not learn until the end of an episode. Such an episode can be regarded as a sample which is then used to update the Q-values of the encountered state-action pairs. Learned information can therefore not be used until the next episode.\\ 
+
+There are a number of parameters used in the implementation of this learning method. The first parameter is $\tau$ for the softmax policy, determining how much the agent will explore. The number of runs which determines how much the agent will learn. The initialization for the Q-values which is still optimistic and the discount factor $\lambda$.\\  
+
+How the number of steps needed to catch a prey changes over the number of runs for different parameter settings can be seen in figures \ref{fig:onLineMonteCarloDiscount} and \ref{fig:onLineMonteCarloTau}. 
+
+\begin{figure}
+\centering
+\caption{Number of steps for each episode as the agent learns for different values of the discount factor. The values are averaged over 50 trials where the agent learns for 100 runs. The value of $\tau$ is set to 0.9}
+\label{fig:onLineMonteCarloDiscount}
+\includegraphics[scale=0.8]{averagesInOneFig_online_discountFact.png}
+\end{figure}
+
+\begin{figure}
+\centering
+\caption{Number of steps for each episode as the agent learns for different values of $\tau$. The values are averaged over 50 trials where the agent learns for 100 runs. The value of the discount factor is set to 0.8}
+\label{fig:onLineMonteCarloTau}
+\includegraphics[scale=0.8]{averagesInOneFig_online_Tau.png}
+\end{figure}
+
 
 \todo[inline, color=yellow]{Explain the difference with other learning methods theoretically, and compare them using informative graphs.}
 
 \subsubsection{(SC) Off-Policy Monte Carlo Control}\label{sec:exercise4.2}
-\textit{For an explanation off-policy methods, Monte Carlo control and softmax action selection, please take a look at section \ref{sec:exercise1}, \ref{sec:exercise4.1} and \ref{sec:exercise3} respectively.}
-\\ \\ 
-Off-policy Monte Carlo control follows the behavior policy while learning about and improving the estimation policy.\footnote{Sutton, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 126}\\
 
-\todo[inline, color=yellow]{Explain the difference with other learning methods theoretically, and compare them using informative graphs.}
+Off-policy Monte Carlo control follows the behavior policy while learning about and improving the estimation policy, which makes it different from other learning methods.\footnote{Sutton, Barto (1998) \textit{Reinforcement Learning: An Introduction} Cambridge, Massachusetts: The MIT press. p. 126} The behavior policy is a $\epsilon$-soft policy and therefore keeps exploring, while the estimation policy can be a deterministic greedy policy. In order to transfer the learned information from the behavior policy to the estimation policy importance sampling is used, since the probability of taking an action in one policy is not the same as in the other.\\
+
+In this specific case the behavior policy is a softmax policy learned with the on-line Monte Carlo method, using 600 runs. 
+
 
 \subsubsection{(SC) Sarsa}\label{sec:exercise4.3}
 \textit{For an explanation of on-policy methods and temporal difference learning, please take a look at section \ref{sec:exercise1} or \ref{sec:exercise4.1}, and section \ref{sec:exercise1} respectively.}
